@@ -182,3 +182,26 @@
     border-right-color: var(--border);
   }
 }
+
+.board{
+  display: grid;
+  grid-template-columns: auto auto auto auto auto auto auto auto;
+  padding: 10px;
+}
+
+.rows{
+  display: inline-grid;
+  padding: 10px;
+  font-size: 20px;
+  text-align: center;
+}
+
+.cells1{
+  color: beige;
+  background-color: beige;
+}
+
+.cells2{
+  color: green;
+  background-color: green;
+}
