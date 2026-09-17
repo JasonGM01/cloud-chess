@@ -1,5 +1,4 @@
 function StartBoard(board){
-    
     board[0][0] = "Rook";
     board[0][1] = "Knight";
     board[0][2] = "Bishop";
@@ -25,8 +24,8 @@ function StartBoard(board){
     board[7][5] = "Bishop";
     board[7][6] = "Knight";
     board[7][7] = "Rook";
-    
+
     return board;
-}
+};
 
 export default StartBoard;
