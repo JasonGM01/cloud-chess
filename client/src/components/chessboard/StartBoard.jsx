@@ -1,4 +1,5 @@
 function StartBoard(board){
+    
     board[0][0] = "Rook";
     board[0][1] = "Knight";
     board[0][2] = "Bishop";
