@@ -1,7 +1,7 @@
 import Diagonal from '../movement/diagonal'
 import Horizontal from "../movement/horizontal";
 import Vertical from "../movement/vertical";
-import Piece from "../pieces/piece";
+import Piece from '../pieces/piece';
 
 function Movement(board, startRow, startCol, endRow, endCol) {
     if (startRow < 0 || 

@@ -1,4 +1,4 @@
-import Queen from "./queen";
+import Queen from "./queenMove";
 
 function King(startRow, startCol, endRow, endCol){
     if(Math.abs(startRow - endRow) <= 1 && Math.abs(startCol - endCol) <= 1) 
