@@ -1,24 +1,8 @@
-import Diagonal from '../movement/diagonal'
-import Horizontal from "../movement/horizontal";
-import Vertical from "../movement/vertical";
-import Piece from '../pieces/piece';
+import GetPiece from "../pieces/getPiece";
+import { Diagonal, Horizontal, Vertical } from "./checks/pathChecks";
 
-function Movement(board, startRow, startCol, endRow, endCol) {
-    if (startRow < 0 || 
-        startRow > 7 || 
-        startCol < 0 || 
-        startCol > 7 || 
-        endRow < 0 || 
-        endRow > 7 || 
-        endCol < 0 || 
-        endCol > 7) 
-        return false;
-    
-    if (startRow == endRow && 
-        startCol == endCol) 
-        return false;
-
-    const piece = Piece(board, startRow, startCol);
+function ValidatePath(board, startRow, startCol, endRow, endCol){
+    const piece = GetPiece(board, startRow, startCol);
 
     console.log(piece);
     if (piece != null) {
@@ -68,7 +52,7 @@ function Movement(board, startRow, startCol, endRow, endCol) {
 
             default: return false;
         }
-    }
+    } else return false;
 }
 
-export default Movement;
+export default ValidatePath;
