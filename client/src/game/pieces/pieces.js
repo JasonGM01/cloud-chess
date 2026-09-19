@@ -1,6 +1,5 @@
 export function Bishop(startRow, startCol, endRow, endCol){
-    if(startRow == endRow && startCol == endCol) return false;
-    else if(Math.abs(startRow - endRow) == Math.abs(startCol - endCol)) return true;
+    if(Math.abs(startRow - endRow) == Math.abs(startCol - endCol)) return true;
     else return false; 
 }
 
@@ -16,17 +15,9 @@ export function Knight(startRow, startCol, endRow, endCol){
     else return false; 
 }
 
-export function Pawn(startRow, startCol, endRow, endCol, hasMoved){
-    if(startRow == endRow && startCol == endCol) return false;
+export function Pawn(startCol, endCol){
     if(startCol != endCol) return false;
-    
-    const rowDistance = Math.abs(startRow - endRow)
-    if(hasMoved){
-        return rowDistance == 1;
-    } else if(!hasMoved){
-        hasMoved+1;
-        return rowDistance == 1 || rowDistance == 2;
-    }
+    return true;
 }
 
 export function Queen(startRow, startCol, endRow, endCol){

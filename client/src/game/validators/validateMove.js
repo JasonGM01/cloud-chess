@@ -1,15 +1,18 @@
 import ValidateDestination from "../validators/validateDestination";
 import ValidatePath from "../validators/validatePath";
+// import { TurnOrder } from "./rules/rules";
 import ValidateBoard from "./validateBoard";
 import ValidatePattern from "./validatePattern";
 
 function ValidateMove(board, startRow, startCol, endRow, endCol, piece){
     if (!ValidateBoard(startRow, startCol, endRow, endCol)) return false;
     
+    if(startRow == endRow && startCol == endCol) return false;
+    
     if (!piece) return false;
     // console.log("Got piece");
 
-    if(startRow == endRow && startCol == endCol) return false;
+    // if(!TurnOrder(turn, piece)) return false;
 
     if(!ValidatePattern(startRow, startCol, endRow, endCol, piece)) return false;
 

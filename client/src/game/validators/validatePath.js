@@ -40,7 +40,10 @@ function ValidatePath(board, startRow, startCol, endRow, endCol, piece){
                 return false;
 
             case "Pawn": 
-                if(Math.abs(startRow - endRow) == 1 && startCol == endCol)
+                if(
+                    Math.abs(startRow - endRow) == 1 || 
+                    Math.abs(startRow - endRow == 2) && 
+                    startCol == endCol)
                     return Vertical(board, startRow, startCol, endRow, endCol);
                 return false;
 
