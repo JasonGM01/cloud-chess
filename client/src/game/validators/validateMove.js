@@ -1,5 +1,6 @@
 import ValidateDestination from "../validators/validateDestination";
 import ValidatePath from "../validators/validatePath";
+import ValidatePattern from "./validatePattern";
 
 function ValidateMove(board, startRow, startCol, endRow, endCol, piece){
     if (startRow < 0 || 
@@ -17,8 +18,10 @@ function ValidateMove(board, startRow, startCol, endRow, endCol, piece){
 
     if(startRow == endRow && startCol == endCol) return false;
 
+    if(!ValidatePattern(startRow, startCol, endRow, endCol, piece)) return false;
+
     // console.log("Path validation");
-    if(!ValidatePath(board, startRow, startCol, endRow, endCol, piece)) {console.log("Failed"); return false;};
+    if(!ValidatePath(board, startRow, startCol, endRow, endCol, piece)) return false;
 
     // console.log("Destination check");
     if(!ValidateDestination(board, endRow, endCol)) return true;

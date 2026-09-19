@@ -16,8 +16,8 @@ function MovePiece(board, startRow, startCol, endRow, endCol){
     
     if(!ValidateMove(board, startRow, startCol, endRow, endCol, piece)) return false;
   
-    const pieceMovement = moves[piece.type];
-    pieceMovement(startRow, startCol, endRow, endCol);
+    const execute = moves[piece.type];
+    execute(startRow, startCol, endRow, endCol);
 
     board[endRow][endCol] = piece;
     board[startRow][startCol] = null;

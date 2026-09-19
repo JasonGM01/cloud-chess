@@ -11,9 +11,9 @@ export function King(startRow, startCol, endRow, endCol){
 }
 
 export function Knight(startRow, startCol, endRow, endCol){
-    if(Math.abs(startRow - endRow) == 2 && Math.abs(startCol - endCol) == 1) {console.log("Path 1");return true;}
-    else if(Math.abs(startRow - endRow) == 1 && Math.abs(startCol - endCol) == 2) {console.log("Path 2");return true;}
-    else {console.log("Fail");return false;} 
+    if(Math.abs(startRow - endRow) == 2 && Math.abs(startCol - endCol) == 1) return true;
+    else if(Math.abs(startRow - endRow) == 1 && Math.abs(startCol - endCol) == 2) return true;
+    else return false; 
 }
 
 export function Pawn(startRow, startCol, endRow, endCol, hasMoved){

@@ -8,9 +8,9 @@ function App() {
   const start = StartBoard(board);
 
   console.log(start);
-  console.log(MovePiece(start, 0, 1, 2, 2) ? "Movement is free" : "Invalid move");
+  console.log(MovePiece(start, 0, 1, 2, 2) ? "Moved" : "Invalid move");
 
-  console.log(MovePiece(start, 0, 0, 0, 6) ? "Movement is free" : "Invalid move");
+  console.log(MovePiece(start, 0, 0, 0, 6) ? "Moved" : "Invalid move");
 
   return (
     <div className="board">
