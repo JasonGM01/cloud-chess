@@ -1,17 +1,10 @@
 import ValidateDestination from "../validators/validateDestination";
 import ValidatePath from "../validators/validatePath";
+import ValidateBoard from "./validateBoard";
 import ValidatePattern from "./validatePattern";
 
 function ValidateMove(board, startRow, startCol, endRow, endCol, piece){
-    if (startRow < 0 || 
-        startRow > 7 || 
-        startCol < 0 || 
-        startCol > 7 || 
-        endRow < 0 || 
-        endRow > 7 || 
-        endCol < 0 || 
-        endCol > 7) 
-        return false;
+    if (!ValidateBoard(startRow, startCol, endRow, endCol)) return false;
     
     if (!piece) return false;
     // console.log("Got piece");
