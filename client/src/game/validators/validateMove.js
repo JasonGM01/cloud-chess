@@ -1,17 +1,7 @@
-import GetPiece from "../pieces/getPiece";
-import { Rook, Bishop, Knight, King, Queen, Pawn } from "../pieces/pieces";
 import ValidateDestination from "../validators/validateDestination";
+import ValidatePath from "../validators/validatePath";
 
-const moves = {
-    Rook,
-    Bishop,
-    Knight,
-    King, 
-    Queen,
-    Pawn
-};
-
-function ValidateMove(board, startRow, startCol, endRow, endCol){
+function ValidateMove(board, startRow, startCol, endRow, endCol, piece){
     if (startRow < 0 || 
         startRow > 7 || 
         startCol < 0 || 
@@ -22,16 +12,18 @@ function ValidateMove(board, startRow, startCol, endRow, endCol){
         endCol > 7) 
         return false;
     
-    const piece = GetPiece(board, startRow, startCol);
     if (!piece) return false;
+    // console.log("Got piece");
 
     if(startRow == endRow && startCol == endCol) return false;
 
-    const pieceMovement = moves[piece.type];
-    if(!pieceMovement) return false;
+    // console.log("Path validation");
+    if(!ValidatePath(board, startRow, startCol, endRow, endCol, piece)) {console.log("Failed"); return false;};
+
+    // console.log("Destination check");
+    if(!ValidateDestination(board, endRow, endCol)) return true;
     
-    if(!ValidateDestination(board, endRow, endCol)) return false;
-    
+    console.log("Passed");
     return true;
 }
 

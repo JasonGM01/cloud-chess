@@ -8,13 +8,9 @@ function App() {
   const start = StartBoard(board);
 
   console.log(start);
-  console.log(MovePiece(start, 0, 1, 2, 2) ? "Movement is free" : "Movement is blocked");
+  console.log(MovePiece(start, 0, 1, 2, 2) ? "Movement is free" : "Invalid move");
 
-  console.log(MovePiece(start, 0, 1, 1, 2) ? "Movement is free" : "Movement is blocked");
-
-  console.log(MovePiece(start, 0, 0, 0, 2) ? "Movement is free" : "Movement is blocked");
-
-  console.log(MovePiece(start, 0, 0, 0, 6) ? "Movement is free" : "Movement is blocked");
+  console.log(MovePiece(start, 0, 0, 0, 6) ? "Movement is free" : "Invalid move");
 
   return (
     <div className="board">
