@@ -26,7 +26,7 @@ function MovePiece(board, startRow, startCol, endRow, endCol){
     
     piece.hasMoved = true;
     
-    if(PawnPromo) return Promote(piece);
+    if((endCol == 0 || endCol == 7) && PawnPromo) return Promote(piece);
 
     return true;
 }
