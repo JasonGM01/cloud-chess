@@ -1,7 +1,7 @@
 import { Rook, Bishop, Knight, King, Queen, Pawn } from "../pieces/pieces";
-import GetPiece from "../pieces/getPiece";
+import { GetPiece, GetKing } from "../pieces/getPiece";
 import ValidateMove from "../validators/validateMove";
-import { PawnPromo } from "../validators/rules/rules";
+import { CheckKing, PawnPromo, TurnOrder } from "../validators/rules/rules";
 import Promote from "../pieces/promote";
 
 const moves = {
@@ -13,20 +13,34 @@ const moves = {
     Pawn
 };
 
-function MovePiece(board, startRow, startCol, endRow, endCol){  
+function MovePiece(board, startRow, startCol, endRow, endCol, turn){  
     const piece = GetPiece(board, startRow, startCol);
+
+    if(!TurnOrder(turn, piece)) return false;
     
-    if(!ValidateMove(board, startRow, startCol, endRow, endCol, piece)) return false;
+    // console.log("Validation start");
+    if(!ValidateMove(board, startRow, startCol, endRow, endCol, piece, turn)) return false;
   
     const execute = moves[piece.type];
     execute(startRow, startCol, endRow, endCol);
-
+    
+    // console.log("execute");
     board[endRow][endCol] = piece;
     board[startRow][startCol] = null;
     
+    const KingData = GetKing(board, piece.color);
+    const King = KingData[0];
+    const row = KingData[1];
+    const col = KingData[2];
+    
+    if(CheckKing(board, row, col, King)){ 
+        board[startRow][startCol] = piece;
+        board[endRow][endCol] = null
+        return false;}
+
     piece.hasMoved = true;
     
-    if((endCol == 0 || endCol == 7) && PawnPromo) return Promote(piece);
+    if((endCol == 0 || endCol == 7) && PawnPromo(endRow, piece)) return Promote(piece);
 
     return true;
 }
