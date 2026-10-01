@@ -1,6 +1,5 @@
-import MovePiece from "../../movement/movePiece";
 import { GetPiece } from "../../pieces/getPiece";
-import ValidateMove from "../validateMove";
+import { ValidateMove, ValidateLegal } from "../validation";
 
 export function TurnOrder(turn, piece) {
     return turn == piece.color;
@@ -39,27 +38,20 @@ export function CheckKing(board, row, col, piece) {
             if (square == null) continue;
             if (square.color == piece.color) continue;
             if (square.type == "Pawn") return PawnATK(i, j, row, col, square, piece);
-            else return ValidateMove(board, i, j, row, col, square);
+            else { return ValidateMove(board, i, j, row, col, square);}
         }
     }
     return false;
 }
 
-export function Checkmate(board, row, col, piece, color, turn) {
-    if (!CheckKing(board, row, col, piece)) return false;
+export function Checkmate(board, row, col, piece, turn) {
+    return (
+        CheckKing(board, row, col, piece) &&
+        !ValidateLegal(board, piece, turn));
+}
 
-    for (let i = 0; i <= 7; i++) {
-        for (let j = 0; j <= 7; j++) {
-            let square = GetPiece(board, i, j);
-            if (square == null) continue;
-            if (square.color != color) continue;
-            for (let k = 0; k <= 7; k++) {
-                for (let l = 0; l <= 7; l++) {
-                    const test = structuredClone(board);
-                    if (MovePiece(test, i, j, k, l, turn)) return false;
-                }
-            }
-        }
-    }
-    return true;
+export function Stalemate(board, row, col, piece, turn){
+    return (
+        !CheckKing(board, row, col, piece) &&
+        !ValidateLegal(board, piece, turn));
 }

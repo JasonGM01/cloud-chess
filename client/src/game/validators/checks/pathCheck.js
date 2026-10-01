@@ -16,6 +16,7 @@ export function Diagonal(board, startRow, startCol, endRow, endCol) {
 export function Horizontal(board, startRow, startCol, endCol) {
     if (startCol < endCol) {
         for (let i = startCol + 1; i < endCol; i++) {
+            // console.log("upper hori");
             if (board[startRow][i] != null) {
                 return false;
             }
@@ -23,7 +24,10 @@ export function Horizontal(board, startRow, startCol, endCol) {
         }return true;
     } else if (startCol > endCol) {
         for (let i = startCol - 1; i > endCol; i--) {
+            // console.log(i);
+            // console.log("lower hori");
             if (board[startRow][i] != null) {
+                console.log(board[startRow][i]);
                 return false;
             }
             
@@ -34,7 +38,7 @@ export function Horizontal(board, startRow, startCol, endCol) {
 export function Vertical(board, startRow, startCol, endRow) {
     if (startRow < endRow) {
         for (let i = startRow + 1; i < endRow; i++) {
-            // console.log("lower");
+            // console.log("lower vert");
             if (board[i][startCol] != null) {
                 // console.log(board[i][startCol]);
                 return false;
@@ -43,7 +47,7 @@ export function Vertical(board, startRow, startCol, endRow) {
         }return true;
     } else if (startRow > endRow) {
         for (let i = startRow - 1; i > endRow; i--) {
-            // console.log("upper");
+            // console.log("upper vert");
             if (board[i][startCol] != null) {
                 // console.log(board[i][startCol]);
                 return false;
