@@ -1,19 +1,13 @@
 import { GetPiece, GetKing } from "../pieces/getPiece";
 import { ValidateMove } from "../validators/validation";
-import { CheckKing, Checkmate, PawnPromo, TurnOrder } from "../validators/rules/rules";
-import Promote from "../pieces/promote";
+import { CheckKing, TurnOrder } from "../validators/rules/rules";
+import Simulation from "./simulation";
 
 function MovePiece(board, startRow, startCol, endRow, endCol, turn, sim) {
     const piece = GetPiece(board, startRow, startCol);
     if (piece == null) return false;
-    
-    const oppColor = piece.color == "White" ? "Black" : "White";
 
-    const oppKingData = GetKing(board, oppColor);
-    const oppKing = oppKingData[0];
-    const oppRow = oppKingData[1];
-    const oppCol = oppKingData[2];
-    
+    console.log(turn);
     if (!TurnOrder(turn, piece)) return false;
 
     // console.log("Validation start");
@@ -36,23 +30,16 @@ function MovePiece(board, startRow, startCol, endRow, endCol, turn, sim) {
         return false;
     }
 
-    // console.log("sim check");
+    console.log("sim check");
     // console.log(board);
-    if (sim == false) {
-        piece.hasMoved = true;
+    if (sim == false)
+        if (!Simulation(board, endRow, piece, turn)) {
+            board[startRow][startCol] = piece;
+            board[endRow][endCol] = null;
+            return false;
+        };
 
-        if (PawnPromo(endRow, piece)) return Promote(piece);
-        // console.log("Check", CheckKing(board, oppRow, oppCol, oppKing));
-        if (CheckKing(board, oppRow, oppCol, oppKing)) {
-            // console.log("Checkmate");
-            if (Checkmate(board, oppRow, oppCol, oppKing, "Black")) {
-                // console.log("Checkmate", Checkmate(board, oppRow, oppCol, oppKing, "Black"));
-                return false;
-            }
-            return true;
-        }
-        
-    }return true;
+    return true;
 }
 
 export default MovePiece;
