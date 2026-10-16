@@ -7,7 +7,7 @@ function MovePiece(board, startRow, startCol, endRow, endCol, turn, sim) {
     const piece = GetPiece(board, startRow, startCol);
     if (piece == null) return false;
 
-    console.log(turn);
+    // console.log(turn);
     if (!TurnOrder(turn, piece)) return false;
 
     // console.log("Validation start");
@@ -30,7 +30,7 @@ function MovePiece(board, startRow, startCol, endRow, endCol, turn, sim) {
         return false;
     }
 
-    console.log("sim check");
+    // console.log("sim check");
     // console.log(board);
     if (sim == false)
         if (!Simulation(board, endRow, piece, turn)) {

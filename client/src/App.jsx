@@ -1,27 +1,30 @@
 import './App.css'
 import Board from "../src/game//board/board";
-import StartBoard from '../src/game/board/startBoard';
-import MovePiece from './game/movement/movePiece';
-import { GetPiece } from './game/pieces/getPiece';
-// import Test from '../src/game/board/test';
+// import StartBoard from '../src/game/board/startBoard';
+// import MovePiece from './game/movement/movePiece';
+// import { GetPiece } from './game/pieces/getPiece';
+import { Castling } from './game/validators/rules/rules';
+import Test from '../src/game/board/test';
 
 function App() {
   const board = Board();
-  const start = StartBoard(board);
-  // const test = Test(board);
-  let Turn = "White";
-  let sim = false;
+  // const start = StartBoard(board);
+  const test = Test(board);
+  let Turn = "Black";
+  // let sim = false;
 
-  // console.log(test);
-  console.log(MovePiece(start, 0, 1, 2, 2, Turn, sim) ? "Moved" : "Invalid move");
-  console.log(start);
+  console.log(test);
+  // console.log(MovePiece(start, 0, 1, 2, 2, Turn, sim) ? "Moved" : "Invalid move");
+  // console.log(start);
 
-  Turn = "Black";
-  console.log(Turn);
-  console.log("Next turn");
-  console.log(GetPiece(board, 6, 0));
-  console.log(MovePiece(start, 6, 0, 5, 0, Turn, sim) ? "Moved" : "Invalid move");
+  // Turn = "Black";
+  // console.log(Turn);
+  // console.log("Next turn");
+  // console.log(GetPiece(board, 6, 0));
+  // console.log(MovePiece(start, 6, 0, 5, 0, Turn, sim) ? "Moved" : "Invalid move");
 
+  console.log(Castling(test, 0, 0, 0, 4, test[0][0], test[0][4], Turn));
+  console.log(Castling(test, 0, 4, 0, 7, test[0][4], test[0][7], Turn)); 
   // console.log(GetPiece(test, 2, 0));
   // console.log(GetPiece(test, 5, 0));
 

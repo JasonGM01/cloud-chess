@@ -4,9 +4,9 @@ function StartBoard(board){
 
     board[0][0] = CreatePieces("Rook", "White");
     board[0][1] = CreatePieces("Knight", "White");
-    board[0][2] = CreatePieces("Bishop", "White");
-    board[0][3] = CreatePieces("King", "White");
-    board[0][4] = CreatePieces("Queen", "White");
+    board[0][2] = CreatePieces("Bishop", "White");    
+    board[0][3] = CreatePieces("Queen", "White");
+    board[0][4] = CreatePieces("King", "White");
     board[0][5] = CreatePieces("Rook", "White");
     board[0][6] = CreatePieces("Knight", "White");
     board[0][7] = CreatePieces("Bishop", "White");

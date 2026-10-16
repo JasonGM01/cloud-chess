@@ -1,6 +1,6 @@
 import HasLegalMove from "../../movement/hasLegalMove";
 import { GetPiece } from "../../pieces/getPiece";
-import { ValidateMove } from "../validation";
+import { KingSide, QueenSide, ValidateMove } from "../validation";
 
 export function TurnOrder(turn, piece) {
     return turn == piece.color;
@@ -60,6 +60,8 @@ export function Stalemate(board, row, col, piece, turn) {
 }
 
 export function Castling(board, row1, col1, row2, col2, piece1, piece2, turn) {
+    if(piece1 == null || piece2 == null) return false;
+    
     const King = piece1.type == "King" ? piece1 : piece2;
     const kingRow = piece1.type == "King" ? row1 : row2;
     const kingCol = piece1.type == "King" ? col1 : col2;
@@ -68,26 +70,32 @@ export function Castling(board, row1, col1, row2, col2, piece1, piece2, turn) {
     const rookRow = piece1.type == "Rook" ? row1 : row2;
     const rookCol = piece1.type == "Rook" ? col1 : col2;
 
+    if (King == null || Rook == null) return false;
+
+    if (King.color != turn) return false;
+
     if (King.type != "King" || Rook.type != "Rook") return false;
+
+    if (board[kingRow][kingCol] != King) return false;
+
+    if (board[rookRow][rookCol] != Rook) return false;
 
     if (King.color != Rook.color) return false;
 
     if (kingRow != rookRow) return false;
 
+    if (kingCol != 4) return false;
+
+    if (rookCol != 0 && rookCol != 7) return false;
+
+    if ((King.color == "White" && kingRow != 7) || (King.color == "Black" && kingRow != 0)) return false;
+
     if (King.hasMoved == true || Rook.hasMoved == true) return false;
 
-    if (CheckKing(board, kingRow, kingCol, King, turn)) return false;
-
     if (kingCol < rookCol) {
-        if (
-            (CheckKing(board, kingRow, kingCol + 1, King, turn)) ||
-            (CheckKing(board, kingRow, kingCol + 2, King, turn))
-        ) return false;
+        return KingSide(board, kingRow, kingCol, rookCol, King, turn, true);
     } else if (kingCol > rookCol) {
-        if (
-            (CheckKing(board, kingRow, kingCol - 1, King, turn)) ||
-            (CheckKing(board, kingRow, kingCol - 2, King, turn))
-        ) return false;
-    } else return true;
+        return QueenSide(board, kingRow, kingCol, rookCol, King, turn, true);
+    } else return false;
 
 }
