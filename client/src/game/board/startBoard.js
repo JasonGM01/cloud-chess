@@ -22,9 +22,9 @@ function StartBoard(board){
 
     board[7][0] = CreatePieces("Rook", "Black");
     board[7][1] = CreatePieces("Knight", "Black");
-    board[7][2] = CreatePieces("Bishop", "Black");
-    board[7][3] = CreatePieces("King", "Black");
-    board[7][4] = CreatePieces("Queen", "Black");
+    board[7][2] = CreatePieces("Bishop", "Black");    
+    board[7][3] = CreatePieces("Queen", "Black");
+    board[7][4] = CreatePieces("King", "Black");
     board[7][5] = CreatePieces("Rook", "Black");
     board[7][6] = CreatePieces("Knight", "Black");
     board[7][7] = CreatePieces("Bishop", "Black");

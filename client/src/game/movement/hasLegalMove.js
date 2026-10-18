@@ -1,7 +1,7 @@
 import { GetPiece } from "../pieces/getPiece";
 import MovePiece from "./movePiece";
 
-function HasLegalMove(board, piece, turn){
+function HasLegalMove(board, piece, turn, lastMove){
     for (let i = 0; i <= 7; i++) {
         for (let j = 0; j <= 7; j++) {
             // console.log("get piece");
@@ -14,7 +14,7 @@ function HasLegalMove(board, piece, turn){
                     // console.log(square);
                     const test = structuredClone(board);
                     // console.log(i, j, k, l);
-                    if (MovePiece(test, i, j, k, l, turn, true)) return true;
+                    if (MovePiece(test, i, j, k, l, turn, true, lastMove)) return true;
                 }
             }
         }

@@ -1,14 +1,16 @@
 import { GetPiece, GetKing } from "../pieces/getPiece";
+import { TurnOrder } from "../rules/rules";
 import { ValidateMove } from "../validators/validation";
-import { CheckKing, TurnOrder } from "../validators/rules/rules";
+import { CheckKing } from "../rules/kingRules";
+
 import Simulation from "./simulation";
 
-function MovePiece(board, startRow, startCol, endRow, endCol, turn, sim) {
+function MovePiece(board, startRow, startCol, endRow, endCol, turn, sim, lastMove) {
     const piece = GetPiece(board, startRow, startCol);
     if (piece == null) return false;
 
     // console.log(turn);
-    if (!TurnOrder(turn, piece)) return false;
+    if (!TurnOrder(turn, piece, lastMove)) return false;
 
     // console.log("Validation start");
     if (!ValidateMove(board, startRow, startCol, endRow, endCol, piece, turn)) return false;
@@ -33,7 +35,7 @@ function MovePiece(board, startRow, startCol, endRow, endCol, turn, sim) {
     // console.log("sim check");
     // console.log(board);
     if (sim == false)
-        if (!Simulation(board, endRow, piece, turn)) {
+        if (!Simulation(board, endRow, piece, turn, lastMove)) {
             board[startRow][startCol] = piece;
             board[endRow][endCol] = null;
             return false;

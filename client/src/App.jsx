@@ -1,41 +1,35 @@
 import './App.css'
+import { useState } from 'react-dom';
 import Board from "../src/game//board/board";
+import MovePiece from './game/movement/movePiece';
 // import StartBoard from '../src/game/board/startBoard';
 // import MovePiece from './game/movement/movePiece';
 // import { GetPiece } from './game/pieces/getPiece';
-import { Castling } from './game/validators/rules/rules';
-import Test from '../src/game/board/test';
+// import { Castling } from './game/validators/rules/rules';
+// import Test from '../src/game/board/test';
 
 function App() {
-  const board = Board();
-  // const start = StartBoard(board);
-  const test = Test(board);
-  let Turn = "Black";
-  // let sim = false;
+  const startBoard = Board();
+  const [lastMove, setLastMove] = useState(null);
+  const [board, setBoard] = useState(startBoard);
+  const [turn, setTurn] = useState("White");
+  const testBoard = structuredClone(board);
 
-  console.log(test);
-  // console.log(MovePiece(start, 0, 1, 2, 2, Turn, sim) ? "Moved" : "Invalid move");
-  // console.log(start);
+  // console.log(board);
+  if (MovePiece(testBoard, startRow, startCol, endRow, endCol, turn, false, lastMove)) {
+    setLastMove({
+      type: type,
+      color: color,
+      startRow,
+      startCol,
+      endRow,
+      endCol
+    });
 
-  // Turn = "Black";
-  // console.log(Turn);
-  // console.log("Next turn");
-  // console.log(GetPiece(board, 6, 0));
-  // console.log(MovePiece(start, 6, 0, 5, 0, Turn, sim) ? "Moved" : "Invalid move");
+    setTurn(turn === "White" ? "Black" : "White");
 
-  console.log(Castling(test, 0, 0, 0, 4, test[0][0], test[0][4], Turn));
-  console.log(Castling(test, 0, 4, 0, 7, test[0][4], test[0][7], Turn)); 
-  // console.log(GetPiece(test, 2, 0));
-  // console.log(GetPiece(test, 5, 0));
-
-  // console.log(MovePiece(test, 2, 2, 4, 2, Turn, sim) ? "Moved" : "Invalid move");
-  // console.log(MovePiece(test, 2, 2, 5, 5, Turn, sim) ? "Moved" : "Invalid move");
-  // console.log(MovePiece(test, 2, 2, 3, 3, Turn, sim) ? "Moved" : "Invalid move");
-  // console.log(MovePiece(test, 2, 0, 1, 2, Turn, sim) ? "Moved" : "Invalid Move");
-  // console.log(MovePiece(test, 0, 7, 0, 2, Turn, sim) ? "Moved" : "Invalid Move");
-
-  // console.log(test);
-  // console.log(start);
+    setBoard(board);
+  }
 
   return (
     <div className="board">

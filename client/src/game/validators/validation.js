@@ -1,8 +1,6 @@
 import GetDestination from "../pieces/getDestination";
 import { Diagonal, Horizontal, Vertical } from "../validators/checks/pathCheck";
 import { Rook, Bishop, Knight, King, Queen, Pawn } from "../pieces/pieces";
-import { CheckKing } from "./rules/rules";
-import MovePiece from "../movement/movePiece";
 
 export function ValidateBoard(startRow, startCol, endRow, endCol) {
     if (startRow < 0 ||
@@ -121,56 +119,4 @@ export function ValidatePattern(startRow, startCol, endRow, endCol, piece) {
             pieceMovement(startCol, endCol) :
             pieceMovement(startRow, startCol, endRow, endCol)
     );
-}
-
-export function KingSide(board, kingRow, kingCol, rookCol, King, turn) {
-    console.log("Kingside");
-    if (!Horizontal(board, kingRow, kingCol, rookCol)) return false;
-
-    if (CheckKing(board, kingRow, kingCol, King)) return false;
-
-    const test = structuredClone(board);
-
-    if (!MovePiece(test, kingRow, kingCol, kingRow, kingCol + 1, turn)) return false;
-
-    const test2 = structuredClone(board);
-
-    const test2King = test2[kingRow][4];
-    const test2Rook = test2[kingRow][7];
-
-    test2[kingRow][5] = test2Rook;
-    test2[kingRow][6] = test2King;
-
-    test2[kingRow][4] = null;
-    test2[kingRow][7] = null;
-
-    if (CheckKing(test2, kingRow, kingCol + 2, test2[kingRow][6])) return false;
-
-    return true;
-}
-
-export function QueenSide(board, kingRow, kingCol, rookCol, King, turn) {
-    console.log("Queenside");
-    if (!Horizontal(board, kingRow, kingCol, rookCol)) return false;
-
-    if (CheckKing(board, kingRow, kingCol, King)) return false;
-
-    const test = structuredClone(board);
-
-    if (!MovePiece(test, kingRow, kingCol, kingRow, kingCol - 1, turn, true)) return false;
-
-    const test2 = structuredClone(board);
-
-    const test2King = test2[kingRow][kingCol];
-    const test2Rook = test2[kingRow][rookCol];
-
-    test2[kingRow][kingCol - 1] = test2Rook;
-    test2[kingRow][kingCol - 2] = test2King;
-
-    test2[kingRow][kingCol] = null;
-    test2[kingRow][rookCol] = null;
-
-    if (CheckKing(test2, kingRow, kingCol - 2, test2[kingRow][2])) return false;
-
-    return true;
 }
