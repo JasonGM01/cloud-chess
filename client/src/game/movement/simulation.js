@@ -1,8 +1,7 @@
-
 import { GetKing } from "../pieces/getPiece";
 import Promote from "../pieces/promote";
-import { CheckKing, Checkmate, Stalemate } from "../rules/kingRules";
-import { PawnPromo } from "../rules/pawnRules";
+import { ValidateCheck, ValidateCheckmate, ValidateStalemate } from "../validators/kingValidation";
+import { ValidatePawnPromo } from "../validators/pawnValidation";
 
 function Simulation(board, endRow, piece, turn, lastMove) {
     if (piece == null) return false;
@@ -13,28 +12,30 @@ function Simulation(board, endRow, piece, turn, lastMove) {
     const oppKing = oppKingData[0];
     const oppRow = oppKingData[1];
     const oppCol = oppKingData[2];
-    // console.log("sim check");
+    // console.log("sim check 2");
     // console.log(board);
     piece.hasMoved = true;
 
     const oppTurn = turn == "White" ? "Black" : "White";
     // console.log(oppTurn);
 
-    if (PawnPromo(endRow, piece)) return Promote(piece);
+    if (ValidatePawnPromo(endRow, piece)) return Promote(piece);
+
     // console.log("Check", CheckKing(board, oppRow, oppCol, oppKing));
-    if (CheckKing(board, oppRow, oppCol, oppKing)) {
-        // console.log("Checkmate");
-        if (Checkmate(board, oppRow, oppCol, oppKing, turn, lastMove)) {
-            // console.log("Checkmate", Checkmate(board, oppRow, oppCol, oppKing, "Black"))
+    if (ValidateCheck(board, oppRow, oppCol, oppKing)) {
+        // console.log("validate Checkmate");
+        if (ValidateCheckmate(board, oppRow, oppCol, oppKing, turn, lastMove)) {
+            // console.log(ValidateCheckmate(board, oppRow, oppCol, oppKing, turn, lastMove));
             return false;
         }
-
-        return true;
+        // console.log("no checkmate");
     }
 
     // console.log("Stalemate check");
-    if (Stalemate(board, oppRow, oppCol, oppKing, oppTurn)) {
-        console.log("Stalemate");
+    // console.log(oppKing);
+    // console.log(oppTurn);
+    if (ValidateStalemate(board, oppRow, oppCol, oppKing, oppTurn)) {
+        // console.log("Stalemate");
         return false;
     }
     // console.log("No stalemate");

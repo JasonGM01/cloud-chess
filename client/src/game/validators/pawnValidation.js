@@ -29,7 +29,7 @@ export function ValidatePawnPromo(endRow, piece) {
 }
 
 export function ValidateEnPassant(board, startRow, startCol, endRow, endCol, lastMove){
-const piece = GetPiece(board, startRow, startCol);
+    const piece = GetPiece(board, startRow, startCol);
     if (piece == null || piece.type != "Pawn") return false;
     if (lastMove == null || lastMove.type != "Pawn") return false; 
     

@@ -4,9 +4,15 @@ export function Bishop(startRow, startCol, endRow, endCol){
 }
 
 export function King(startRow, startCol, endRow, endCol){
-    if(Math.abs(startRow - endRow) <= 1 && Math.abs(startCol - endCol) <= 1) 
+    // console.log("King pattern check");
+    if(Math.abs(startRow - endRow) <= 1 && Math.abs(startCol - endCol) <= 1) {
+        // console.log("yes");
         return Queen(startRow, startCol, endRow, endCol);
-    else return false;
+    }
+    else {
+        // console.log("no");
+        return false;
+    }
 }
 
 export function Knight(startRow, startCol, endRow, endCol){
@@ -21,6 +27,7 @@ export function Pawn(startCol, endCol){
 }
 
 export function Queen(startRow, startCol, endRow, endCol){
+    // console.log("Queen pattern check");
     return (Bishop(startRow, startCol, endRow, endCol) || Rook(startRow, startCol, endRow, endCol));
 }
 

@@ -17,37 +17,45 @@ export function ValidateBoard(startRow, startCol, endRow, endCol) {
 
 export function ValidateDestination(board, endRow, endCol, color) {
     const destination = GetDestination(board, endRow, endCol, color);
-    // console.log(destination);
+
     if (destination == null) return true;
     else if (destination.color == color) return false;
     else return true;
 }
 
-export function ValidateMove(board, startRow, startCol, endRow, endCol, piece) {
+export function ValidateFirstTurn(turn, color){
+    // console.log("Color check T1");
+    // console.log(turn);
+    // console.log(color);
+    return turn == color;
+}
+
+export function ValidateMove(board, startRow, startCol, endRow, endCol, type, color, attack) {
+
     // console.log("Board");
-    if (!ValidateBoard(startRow, startCol, endRow, endCol)) return false;
+    if (ValidateBoard(startRow, startCol, endRow, endCol) == false) return false;
 
     // console.log("Same space check");
     if (startRow == endRow && startCol == endCol) return false;
 
     // console.log("Get piece");
-    if (!piece) return false;
+    if (type == null) return false;
 
-    // console.log("Move Validation");
-    if (!ValidatePattern(startRow, startCol, endRow, endCol, piece)) return false;
+    // console.log("Pattern Validation");
+    if (ValidatePattern(startRow, startCol, endRow, endCol, type) == false) return false;
 
     // console.log("Path validation");
-    if (!ValidatePath(board, startRow, startCol, endRow, endCol, piece)) return false;
+    if (ValidatePath(board, startRow, startCol, endRow, endCol, type) == false) return false;
 
     // console.log("Destination check");
-    if (!ValidateDestination(board, endRow, endCol, piece.color)) return true;
+    if (ValidateDestination(board, endRow, endCol, color, attack) == false) return false;
 
-    // console.log("Passed");
+    // console.log("Passed validation");
     return true;
 }
 
-export function ValidatePath(board, startRow, startCol, endRow, endCol, piece) {
-    let piece_type = piece.type;
+export function ValidatePath(board, startRow, startCol, endRow, endCol, type) {
+    let piece_type = type;
     // console.log(piece_type);
     if (piece_type != null) {
         switch (piece_type) {
@@ -92,7 +100,7 @@ export function ValidatePath(board, startRow, startCol, endRow, endCol, piece) {
             case "Pawn":
                 if (
                     Math.abs(startRow - endRow) == 1 ||
-                    Math.abs(startRow - endRow == 2) &&
+                    Math.abs(startRow - endRow) == 2 &&
                     startCol == endCol)
                     return Vertical(board, startRow, startCol, endRow);
                 return false;
@@ -111,12 +119,16 @@ const move = {
     Pawn
 };
 
-export function ValidatePattern(startRow, startCol, endRow, endCol, piece) {
-    const pieceMovement = move[piece.type];
-    // console.log(piece);
-    return (
-        piece.type == "Pawn" ?
-            pieceMovement(startCol, endCol) :
-            pieceMovement(startRow, startCol, endRow, endCol)
-    );
+export function ValidatePattern(startRow, startCol, endRow, endCol, type) {
+    if (type == null) return false;
+    // console.log(type);
+    const pieceMovement = move[type];
+    if (
+        type == "Pawn" ? 
+        pieceMovement(startCol, endCol) : 
+        pieceMovement(startRow, startCol, endRow, endCol));
+}
+
+export function ValidateTurn(turn, color, lastMoveColor){
+    return (turn == color && turn != lastMoveColor);
 }

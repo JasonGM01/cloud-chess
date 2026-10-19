@@ -1,46 +1,65 @@
+// import GetDestination from "../pieces/getDestination";
+import GetDestination from "../pieces/getDestination";
 import { GetPiece, GetKing } from "../pieces/getPiece";
-import { TurnOrder } from "../rules/rules";
-import { ValidateMove } from "../validators/validation";
-import { CheckKing } from "../rules/kingRules";
-
+import { EnPassant } from "../rules/atkRules";
+import { ValidateCheck } from "../validators/kingValidation";
+import { ValidateEnPassant } from "../validators/pawnValidation";
+import { ValidateFirstTurn, ValidateMove, ValidateTurn } from "../validators/validation";
 import Simulation from "./simulation";
 
 function MovePiece(board, startRow, startCol, endRow, endCol, turn, sim, lastMove) {
     const piece = GetPiece(board, startRow, startCol);
     if (piece == null) return false;
 
-    // console.log(turn);
-    if (!TurnOrder(turn, piece, lastMove)) return false;
-
-    // console.log("Validation start");
-    if (!ValidateMove(board, startRow, startCol, endRow, endCol, piece, turn)) return false;
-
-    // console.log("execute");
-    board[endRow][endCol] = piece;
-    board[startRow][startCol] = null;
-
+    const destination = GetDestination(board, endRow, endCol);
     const KingData = GetKing(board, piece.color);
-    const King = KingData[0];
+    // const King = KingData[0];
     const row = KingData[1];
     const col = KingData[2];
 
-    // console.log("Check");
-    if (CheckKing(board, row, col, King)) {
-        // console.log("Check");
+    if (lastMove != null) {
+        if (ValidateTurn(turn, piece.color, lastMove.color) == false) {  
+            return false;
+        }
+    }
+    if (lastMove == null) {  
+        if (ValidateFirstTurn(turn, piece.color) == false) return false;
+    }
+
+    if (destination == null && lastMove == null && piece.type != null) {
+        console.log("Validate reg move");
+        if (ValidateMove(board, startRow, startCol, endRow, endCol, piece.type, piece.color) == false) {
+            return false;
+        }
+        console.log("Execute");
+        board[startRow][startCol] = null;
+        board[endRow][endCol] = piece;
+    }
+    else if (destination == null && piece.type == "Pawn") {
+        if (ValidateEnPassant(board, startRow, startCol, endRow, endCol, lastMove) == false) {
+            console.log("Not en passant");
+            return false;
+        }
+        console.log("En Passant");
+        EnPassant(board, startRow, startCol, endRow, endCol, lastMove);
+    }
+
+    if (ValidateCheck(board, row, col)) {
+        console.log("Check");
         board[startRow][startCol] = piece;
         board[endRow][endCol] = null
         return false;
     }
 
-    // console.log("sim check");
-    // console.log(board);
-    if (sim == false)
-        if (!Simulation(board, endRow, piece, turn, lastMove)) {
+    if (sim == false) {
+        if (Simulation(board, endRow, piece, turn, lastMove) == false) {
             board[startRow][startCol] = piece;
             board[endRow][endCol] = null;
             return false;
         };
+    }
 
+    console.log("accepted");
     return true;
 }
 

@@ -6,14 +6,14 @@ import { ValidatePawnATK } from "./pawnValidation";
 import { ValidateMove } from "./validation";
 
 export function ValidateKingSide(board, kingRow, kingCol, rookCol, King, turn) {
-    console.log("Kingside");
-    if (!Horizontal(board, kingRow, kingCol, rookCol)) return false;
+    // console.log("Kingside");
+    if (Horizontal(board, kingRow, kingCol, rookCol) == false) return false;
 
     if (ValidateCheck(board, kingRow, kingCol, King)) return false;
 
     const test = structuredClone(board);
 
-    if (!MovePiece(test, kingRow, kingCol, kingRow, kingCol + 1, turn)) return false;
+    if (MovePiece(test, kingRow, kingCol, kingRow, kingCol + 1, turn) == false) return false;
 
     const test2 = structuredClone(board);
 
@@ -32,14 +32,14 @@ export function ValidateKingSide(board, kingRow, kingCol, rookCol, King, turn) {
 }
 
 export function ValidateQueenSide(board, kingRow, kingCol, rookCol, King, turn) {
-    console.log("Queenside");
-    if (!Horizontal(board, kingRow, kingCol, rookCol)) return false;
+    // console.log("Queenside");
+    if (Horizontal(board, kingRow, kingCol, rookCol) == false) return false;
 
     if (ValidateCheck(board, kingRow, kingCol, King)) return false;
 
     const test = structuredClone(board);
 
-    if (!MovePiece(test, kingRow, kingCol, kingRow, kingCol - 1, turn, true)) return false;
+    if (MovePiece(test, kingRow, kingCol, kingRow, kingCol - 1, turn, true) == false) return false;
 
     const test2 = structuredClone(board);
 
@@ -59,31 +59,40 @@ export function ValidateQueenSide(board, kingRow, kingCol, rookCol, King, turn) 
 
 export function ValidateCheck(board, row, col) {
     const piece = GetPiece(board, row, col);
-    if (piece.type != "King") return false;
+    if (piece == null || piece.type != "King") return false;
     for (let i = 0; i <= 7; i++) {
         for (let j = 0; j <= 7; j++) {
             let square = GetPiece(board, i, j);
             if (square == null) continue;
             if (square.color == piece.color) continue;
             if (square.type == "Pawn") return ValidatePawnATK(board, i, j, row, col, square, piece);
-            else return ValidateMove(board, i, j, row, col, square);
+            else { 
+                // console.log("Validate check move");
+                // console.log(piece);
+                // console.log(ValidateMove(board, i, j, row, col, square.type, square.color) == false ? true : false);
+                return ValidateMove(board, i, j, row, col, square.type, square.color) == false ? true : false;
+            }
         }
     }
+    // console.log("no check");
     return false;
 }
 
 export function ValidateCheckmate(board, row, col, turn, lastMove) {
     const piece = GetPiece(board, row, col);
+    // console.log("Check");
+    // console.log(ValidateCheck(board, row, col, piece) && (HasLegalMove(board, piece, turn, lastMove)));
     return (
         ValidateCheck(board, row, col, piece) &&
-        !HasLegalMove(board, piece, turn, lastMove));
+        HasLegalMove(board, piece, turn, lastMove));
 }
 
 export function ValidateStalemate(board, row, col, turn, lastMove) {
     const piece = GetPiece(board, row, col);
+    // console.log(!ValidateCheck(board, row, col, piece) == true && HasLegalMove(board, piece, turn, lastMove) == false);
     return (
         !ValidateCheck(board, row, col, piece) &&
-        !HasLegalMove(board, piece, turn, lastMove));
+        HasLegalMove(board, piece, turn, lastMove));
 }
 
 export function ValidateCastling(board, startRow, startCol, endRow, endCol, turn) {
@@ -124,7 +133,7 @@ export function ValidateCastling(board, startRow, startCol, endRow, endCol, turn
     if (kingCol < rookCol) {
         //execute
         //console.log("Kingside");
-        if (!ValidateKingSide(board, kingRow, kingCol, rookCol, King, turn, true)) return false;
+        if (ValidateKingSide(board, kingRow, kingCol, rookCol, King, turn, true) == false) return false;
         board[kingRow][kingCol + 2] = King;
         board[rookRow][kingCol + 1] = Rook
         board[kingRow][kingCol] = null;
@@ -134,7 +143,7 @@ export function ValidateCastling(board, startRow, startCol, endRow, endCol, turn
     } else if (kingCol > rookCol) {
         //execute
         //console.log("Queenside");
-        if (!ValidateQueenSide(board, kingRow, kingCol, rookCol, King, turn, true)) return false;
+        if (ValidateQueenSide(board, kingRow, kingCol, rookCol, King, turn, true) == false) return false;
         board[kingRow][kingCol-2] = King;
         board[rookRow][kingCol-1] = Rook;
         board[kingRow][kingCol] = null;

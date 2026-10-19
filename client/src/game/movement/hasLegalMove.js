@@ -18,7 +18,9 @@ function HasLegalMove(board, piece, turn, lastMove){
                 }
             }
         }
-    } return false;
+    }
+    // console.log("No legal move"); 
+    return false;
 }
 
 export default HasLegalMove;
