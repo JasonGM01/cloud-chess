@@ -59,6 +59,7 @@ export function ValidateQueenSide(board, kingRow, kingCol, rookCol, King, turn) 
 
 export function ValidateCheck(board, row, col) {
     const piece = GetPiece(board, row, col);
+
     if (piece == null || piece.type != "King") return false;
     for (let i = 0; i <= 7; i++) {
         for (let j = 0; j <= 7; j++) {
@@ -70,7 +71,11 @@ export function ValidateCheck(board, row, col) {
                 // console.log("Validate check move");
                 // console.log(piece);
                 // console.log(ValidateMove(board, i, j, row, col, square.type, square.color) == false ? true : false);
-                return ValidateMove(board, i, j, row, col, square.type, square.color) == false ? true : false;
+                // console.log("sim 4");
+                // console.log(ValidateMove(board, i, j, row, col, square.type, square.color) == false ? true : false);
+                if (ValidateMove(board, i, j, row, col, square.type, square.color)){
+                    return true;
+                };
             }
         }
     }

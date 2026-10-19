@@ -51,6 +51,7 @@ export function ValidateMove(board, startRow, startCol, endRow, endCol, type, co
     if (ValidateDestination(board, endRow, endCol, color, attack) == false) return false;
 
     // console.log("Passed validation");
+    // console.log(" ");
     return true;
 }
 

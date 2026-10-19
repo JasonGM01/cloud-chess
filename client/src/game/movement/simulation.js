@@ -22,9 +22,12 @@ function Simulation(board, endRow, piece, turn, lastMove) {
     if (ValidatePawnPromo(endRow, piece)) return Promote(piece);
 
     // console.log("Check", CheckKing(board, oppRow, oppCol, oppKing));
+    // console.log("sim 2");
     if (ValidateCheck(board, oppRow, oppCol, oppKing)) {
         // console.log("validate Checkmate");
+        // console.log("checkmate sim");
         if (ValidateCheckmate(board, oppRow, oppCol, oppKing, turn, lastMove)) {
+            
             // console.log(ValidateCheckmate(board, oppRow, oppCol, oppKing, turn, lastMove));
             return false;
         }
@@ -34,6 +37,7 @@ function Simulation(board, endRow, piece, turn, lastMove) {
     // console.log("Stalemate check");
     // console.log(oppKing);
     // console.log(oppTurn);
+    // console.log("sim 3");
     if (ValidateStalemate(board, oppRow, oppCol, oppKing, oppTurn)) {
         // console.log("Stalemate");
         return false;

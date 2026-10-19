@@ -18,15 +18,23 @@ function MovePiece(board, startRow, startCol, endRow, endCol, turn, sim, lastMov
     const col = KingData[2];
 
     if (lastMove != null) {
-        if (ValidateTurn(turn, piece.color, lastMove.color) == false) {  
+        if (ValidateTurn(turn, piece.color, lastMove.color) == false) {
             return false;
         }
     }
-    if (lastMove == null) {  
+    if (lastMove == null) {
         if (ValidateFirstTurn(turn, piece.color) == false) return false;
     }
 
-    if (destination == null && lastMove == null && piece.type != null) {
+    if (lastMove != null && destination == null && piece.type == "Pawn") {
+        if (ValidateEnPassant(board, startRow, startCol, endRow, endCol, lastMove) == false) {
+            console.log("Not en passant");
+            return false;
+        }
+        console.log("En Passant");
+        EnPassant(board, startRow, startCol, endRow, endCol, lastMove);
+    }
+    else if (piece.type != null) {
         console.log("Validate reg move");
         if (ValidateMove(board, startRow, startCol, endRow, endCol, piece.type, piece.color) == false) {
             return false;
@@ -34,14 +42,6 @@ function MovePiece(board, startRow, startCol, endRow, endCol, turn, sim, lastMov
         console.log("Execute");
         board[startRow][startCol] = null;
         board[endRow][endCol] = piece;
-    }
-    else if (destination == null && piece.type == "Pawn") {
-        if (ValidateEnPassant(board, startRow, startCol, endRow, endCol, lastMove) == false) {
-            console.log("Not en passant");
-            return false;
-        }
-        console.log("En Passant");
-        EnPassant(board, startRow, startCol, endRow, endCol, lastMove);
     }
 
     if (ValidateCheck(board, row, col)) {
@@ -52,6 +52,7 @@ function MovePiece(board, startRow, startCol, endRow, endCol, turn, sim, lastMov
     }
 
     if (sim == false) {
+        // console.log("sim 1");
         if (Simulation(board, endRow, piece, turn, lastMove) == false) {
             board[startRow][startCol] = piece;
             board[endRow][endCol] = null;
