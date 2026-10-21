@@ -205,3 +205,24 @@
   color: green;
   background-color: green;
 }
+
+.board-row{
+  display: flex;
+}
+
+.square{
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+}
+
+.light{
+  background-color: white;  
+}
+
+.dark{
+  background-color: black;
+}

@@ -1,30 +1,28 @@
 import './App.css'
-// import { useState } from 'react';
+import { useState } from 'react';
 import Board from "../src/game//board/board";
-import MovePiece from './game/movement/movePiece';
+// import MovePiece from './game/movement/movePiece';
 import StartBoard from '../src/game/board/startBoard';
-// import { Castling } from './game/validators/rules/rules';
-// import Test from '../src/game/board/test';
-// import { GetPiece } from './game/pieces/getPiece';
-// import { EnPassant } from './game/rules/atkRules';
+import ChessBoard from './components/ChessBoard';
 
 function App() {
   const startBoard = Board();
-  const start = StartBoard(startBoard);
+  // const start = StartBoard(startBoard);
   // const test = Test(startBoard);
   // const [lastMove, setLastMove] = useState(null);
-  // const [board, setBoard] = useState(test);
+  const [board, setBoard] = useState(() => StartBoard(startBoard));
   // const [turn, setTurn] = useState("White");
+  // const [selectedSquare, setSelectedSquare] = useState(null);
   // const testBoard = structuredClone(test);
   // let testLastMove = null;
   // let testTurn = "White";
 
-  console.log(start);
+  console.log(board);
 
   return (
     <div className="board">
       <div className="rows">
-        Check Console
+        {<ChessBoard board={board}/>}
       </div>
     </div>
   )
