@@ -4,6 +4,10 @@ export function EnPassant(board, startRow, startCol, endRow, endCol, lastMove){
     const pawn = GetPiece(board, startRow, startCol);
     if (lastMove == null) return false;
 
+    // console.log(pawn);
+    console.log(startRow, startCol);
+    console.log(endRow, endCol);
+    console.log(lastMove.endRow, lastMove.endCol);
     board[startRow][startCol] = null;
     board[endRow][endCol] = pawn;
     board[lastMove.endRow][lastMove.endCol] = null;

@@ -1,23 +1,27 @@
-import HasLegalMove from "../movement/hasLegalMove";
+import HasLegalMove from "./hasLegalMove";
 import MovePiece from "../movement/movePiece";
 import { GetPiece } from "../pieces/getPiece";
-import { Horizontal } from "./checks/pathCheck";
+import { Horizontal} from "./checks/pathCheck";
 import { ValidatePawnATK } from "./pawnValidation";
 import { ValidateMove } from "./validation";
 
-export function ValidateKingSide(board, kingRow, kingCol, rookCol, King, turn) {
-    // console.log("Kingside");
+export function ValidateKingSide(board, kingRow, kingCol, rookCol, King, turn, lastMove) {
+    console.log("Kingside");
+    // console.log("First row check");
     if (Horizontal(board, kingRow, kingCol, rookCol) == false) return false;
 
     if (ValidateCheck(board, kingRow, kingCol, King)) return false;
-
+    
     const test = structuredClone(board);
 
-    if (MovePiece(test, kingRow, kingCol, kingRow, kingCol + 1, turn) == false) return false;
+    // console.log("Second row check");
+    if (MovePiece(test, kingRow, kingCol, kingRow, kingCol + 1, turn, true, lastMove) == false) return false;
 
-    const test2 = structuredClone(board);
+    if (ValidateCheck(test, kingRow, kingCol + 1)) return false;
+    
+    const test2 = structuredClone(test);
 
-    const test2King = test2[kingRow][kingCol];
+    const test2King = test2[kingRow][kingCol+1];
     const test2Rook = test2[kingRow][rookCol];
 
     test2[kingRow][kingRow + 2] = test2Rook;
@@ -26,24 +30,31 @@ export function ValidateKingSide(board, kingRow, kingCol, rookCol, King, turn) {
     test2[kingRow][kingCol] = null;
     test2[kingRow][rookCol] = null;
 
-    if (ValidateCheck(test2, kingRow, kingCol + 2, test2[kingRow][6])) return false;
-
+    // console.log("Third row check");
+    // if (MovePiece(test, kingRow, kingCol, kingRow, kingCol + 2, turn, true, lastMove) == false) return false;
+    
+    if (ValidateCheck(test2, kingRow, kingCol + 2)) return false;
+   
+    // console.log("Pass");
     return true;
 }
 
 export function ValidateQueenSide(board, kingRow, kingCol, rookCol, King, turn) {
     // console.log("Queenside");
+    // console.log("first row check");
     if (Horizontal(board, kingRow, kingCol, rookCol) == false) return false;
 
     if (ValidateCheck(board, kingRow, kingCol, King)) return false;
 
     const test = structuredClone(board);
 
+    // console.log("second row check");
     if (MovePiece(test, kingRow, kingCol, kingRow, kingCol - 1, turn, true) == false) return false;
 
-    const test2 = structuredClone(board);
+    if(ValidateCheck(test, kingRow, kingCol - 1)) return false;
 
-    const test2King = test2[kingRow][kingCol];
+    const test2 = structuredClone(test);
+    const test2King = test2[kingRow][kingCol-1];
     const test2Rook = test2[kingRow][rookCol];
 
     test2[kingRow][kingCol - 1] = test2Rook;
@@ -52,7 +63,15 @@ export function ValidateQueenSide(board, kingRow, kingCol, rookCol, King, turn) 
     test2[kingRow][kingCol] = null;
     test2[kingRow][rookCol] = null;
 
-    if (ValidateCheck(test2, kingRow, kingCol - 2, test2[kingRow][2])) return false;
+    // console.log("Third row check");
+    // if (MovePiece(test, kingRow, kingCol, kingRow, kingCol - 2, turn, true) == false) {
+    //     console.log("failed move");
+    //     return false;
+    //     }
+    
+    // console.log(test2);
+    if (ValidateCheck(test2, kingRow, kingCol - 2)) return false;
+    // console.log("Passed validation 3")
 
     return true;
 }
@@ -60,23 +79,35 @@ export function ValidateQueenSide(board, kingRow, kingCol, rookCol, King, turn) 
 export function ValidateCheck(board, row, col) {
     const piece = GetPiece(board, row, col);
 
+    // console.log("Check 2");
     if (piece == null || piece.type != "King") return false;
     for (let i = 0; i <= 7; i++) {
         for (let j = 0; j <= 7; j++) {
             let square = GetPiece(board, i, j);
+            // console.log(square);
             if (square == null) continue;
             if (square.color == piece.color) continue;
-            if (square.type == "Pawn") return ValidatePawnATK(board, i, j, row, col, square, piece);
-            else { 
-                // console.log("Validate check move");
-                // console.log(piece);
-                // console.log(ValidateMove(board, i, j, row, col, square.type, square.color) == false ? true : false);
-                // console.log("sim 4");
-                // console.log(ValidateMove(board, i, j, row, col, square.type, square.color) == false ? true : false);
-                if (ValidateMove(board, i, j, row, col, square.type, square.color)){
+            if (square.type == "Pawn") {
+                // console.log("Pawn atk");
+                if (ValidatePawnATK(board, i, j, row, col, square, piece)) {
+                    // console.log("Pawn can attack king");
                     return true;
-                };
+                }
             }
+            else if(square.type != "Pawn") { 
+                // console.log("Validate move");
+                // console.log(row, col);
+                // console.log(square);
+                // console.log(i, j);
+                // console.log(" ");
+                if (ValidateMove(board, i, j, row, col, square.type, square.color)){
+                    // console.log(square);
+                    // console.log("check 2");
+                    return true;
+                }
+            }
+            // console.log("not a piece");
+            // console.log(square);
         }
     }
     // console.log("no check");
@@ -88,16 +119,16 @@ export function ValidateCheckmate(board, row, col, turn, lastMove) {
     // console.log("Check");
     // console.log(ValidateCheck(board, row, col, piece) && (HasLegalMove(board, piece, turn, lastMove)));
     return (
-        ValidateCheck(board, row, col, piece) &&
+        ValidateCheck(board, row, col) &&
         HasLegalMove(board, piece, turn, lastMove));
 }
 
 export function ValidateStalemate(board, row, col, turn, lastMove) {
     const piece = GetPiece(board, row, col);
-    // console.log(!ValidateCheck(board, row, col, piece) == true && HasLegalMove(board, piece, turn, lastMove) == false);
+    // console.log(HasLegalMove(board, piece, turn, lastMove));
     return (
-        !ValidateCheck(board, row, col, piece) &&
-        HasLegalMove(board, piece, turn, lastMove));
+        ValidateCheck(board, row, col) &&
+        !HasLegalMove(board, piece, turn, lastMove));
 }
 
 export function ValidateCastling(board, startRow, startCol, endRow, endCol, turn) {
@@ -135,24 +166,28 @@ export function ValidateCastling(board, startRow, startCol, endRow, endCol, turn
 
     if (King.hasMoved == true || Rook.hasMoved == true) return false;
 
+    // console.log("Side");
     if (kingCol < rookCol) {
         //execute
-        //console.log("Kingside");
-        if (ValidateKingSide(board, kingRow, kingCol, rookCol, King, turn, true) == false) return false;
-        board[kingRow][kingCol + 2] = King;
-        board[rookRow][kingCol + 1] = Rook
-        board[kingRow][kingCol] = null;
-        board[rookRow][rookCol] = null
+        // console.log("Kingside");
+        if (ValidateKingSide(board, kingRow, kingCol, rookCol, King, turn, true) == false) {
+            // console.log("fail to execute");
+            return false;
+        }
+        // board[kingRow][kingCol + 2] = King;
+        // board[rookRow][kingCol + 1] = Rook
+        // board[kingRow][kingCol] = null;
+        // board[rookRow][rookCol] = null;
         return true;
 
     } else if (kingCol > rookCol) {
         //execute
-        //console.log("Queenside");
+        // console.log("Queenside");
         if (ValidateQueenSide(board, kingRow, kingCol, rookCol, King, turn, true) == false) return false;
-        board[kingRow][kingCol-2] = King;
-        board[rookRow][kingCol-1] = Rook;
-        board[kingRow][kingCol] = null;
-        board[rookRow][rookCol] = null;
+        // board[kingRow][kingCol-2] = King;
+        // board[rookRow][kingCol-1] = Rook;
+        // board[kingRow][kingCol] = null;
+        // board[rookRow][rookCol] = null;
         return true;
 
     } else return false;

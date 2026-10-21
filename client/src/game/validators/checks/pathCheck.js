@@ -14,29 +14,39 @@ export function Diagonal(board, startRow, startCol, endRow, endCol) {
 }
 
 export function Horizontal(board, startRow, startCol, endCol) {
-    if (startCol < endCol) {
+    // console.log("Horizontal check");
+    if (startCol <= endCol) {
         for (let i = startCol + 1; i < endCol; i++) {
             // console.log("upper hori");
+            // console.log(i);
+            // console.log(board[startRow][i]);
             if (board[startRow][i] != null) {
+                // console.log("No piece");
                 return false;
             }
-            
-        }return true;
-    } else if (startCol > endCol) {
+        }
+        // console.log("Pass horizontal");
+        return true;
+    } else if (startCol >= endCol) {
         for (let i = startCol - 1; i > endCol; i--) {
             // console.log(i);
             // console.log("lower hori");
             if (board[startRow][i] != null) {
-                console.log(board[startRow][i]);
+                // console.log(board[startRow][i]);
                 return false;
             }
             
-        }return true;
-    } else return false;
+        }
+        // console.log("Pass horizontal");
+        return true;
+    } else {
+        // console.log("Fail horizontal");
+        return false;
+    }
 }
 
 export function Vertical(board, startRow, startCol, endRow) {
-    if (startRow < endRow) {
+    if (startRow <= endRow) {
         for (let i = startRow + 1; i < endRow; i++) {
             // console.log("lower vert");
             if (board[i][startCol] != null) {
@@ -45,7 +55,7 @@ export function Vertical(board, startRow, startCol, endRow) {
             }
             
         }return true;
-    } else if (startRow > endRow) {
+    } else if (startRow >= endRow) {
         for (let i = startRow - 1; i > endRow; i--) {
             // console.log("upper vert");
             if (board[i][startCol] != null) {

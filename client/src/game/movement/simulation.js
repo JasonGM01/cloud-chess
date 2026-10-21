@@ -9,7 +9,7 @@ function Simulation(board, endRow, piece, turn, lastMove) {
     const oppColor = piece.color == "White" ? "Black" : "White";
 
     const oppKingData = GetKing(board, oppColor);
-    const oppKing = oppKingData[0];
+    // const oppKing = oppKingData[0];
     const oppRow = oppKingData[1];
     const oppCol = oppKingData[2];
     // console.log("sim check 2");
@@ -23,26 +23,28 @@ function Simulation(board, endRow, piece, turn, lastMove) {
 
     // console.log("Check", CheckKing(board, oppRow, oppCol, oppKing));
     // console.log("sim 2");
-    if (ValidateCheck(board, oppRow, oppCol, oppKing)) {
+    // console.log("Validate check");
+    if (ValidateCheck(board, oppRow, oppCol)) {
         // console.log("validate Checkmate");
-        // console.log("checkmate sim");
-        if (ValidateCheckmate(board, oppRow, oppCol, oppKing, turn, lastMove)) {
-            
+        if (ValidateCheckmate(board, oppRow, oppCol, turn, lastMove)) {
+            // console.log("Checkmate");
             // console.log(ValidateCheckmate(board, oppRow, oppCol, oppKing, turn, lastMove));
             return false;
         }
         // console.log("no checkmate");
     }
 
-    // console.log("Stalemate check");
     // console.log(oppKing);
     // console.log(oppTurn);
     // console.log("sim 3");
-    if (ValidateStalemate(board, oppRow, oppCol, oppKing, oppTurn)) {
+    // console.log("Stalemate check");
+    if (ValidateStalemate(board, oppRow, oppCol, oppTurn, lastMove)) {
         // console.log("Stalemate");
         return false;
     }
     // console.log("No stalemate");
+
+    // console.log("Sim pass");
     return true;
 }
 
