@@ -22,7 +22,10 @@ export function Knight(startRow, startCol, endRow, endCol){
 }
 
 export function Pawn(startCol, endCol){
-    if(startCol != endCol) return false;
+    const colDistance = Math.abs(startCol - endCol);
+    if(startCol != endCol) {
+        if(colDistance != 1) return false;
+    }
     return true;
 }
 

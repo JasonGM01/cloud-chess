@@ -13,6 +13,7 @@ function HasLegalMove(board, piece, turn, lastMove){
                 for (let l = 0; l <= 7; l++) {
                     // console.log(square);
                     const test = structuredClone(board);
+                    // console.log(test);
                     // console.log(i, j, k, l);
                     if (MovePiece(test, i, j, k, l, turn, true, lastMove)) return true;
                 }

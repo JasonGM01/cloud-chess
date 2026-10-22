@@ -6,7 +6,7 @@ import { ValidatePawnATK } from "./pawnValidation";
 import { ValidateMove } from "./validation";
 
 export function ValidateKingSide(board, kingRow, kingCol, rookCol, King, turn, lastMove) {
-    console.log("Kingside");
+    // console.log("Kingside");
     // console.log("First row check");
     if (Horizontal(board, kingRow, kingCol, rookCol) == false) return false;
 
@@ -102,7 +102,7 @@ export function ValidateCheck(board, row, col) {
                 // console.log(" ");
                 if (ValidateMove(board, i, j, row, col, square.type, square.color)){
                     // console.log(square);
-                    // console.log("check 2");
+                    // console.log("check 3");
                     return true;
                 }
             }
@@ -120,14 +120,20 @@ export function ValidateCheckmate(board, row, col, turn, lastMove) {
     // console.log(ValidateCheck(board, row, col, piece) && (HasLegalMove(board, piece, turn, lastMove)));
     return (
         ValidateCheck(board, row, col) &&
-        HasLegalMove(board, piece, turn, lastMove));
+        !HasLegalMove(board, piece, turn, lastMove));
 }
 
 export function ValidateStalemate(board, row, col, turn, lastMove) {
     const piece = GetPiece(board, row, col);
-    // console.log(HasLegalMove(board, piece, turn, lastMove));
+//     const check = ValidateCheck(board, row, col);
+// const legal = HasLegalMove(board, piece, turn, lastMove);
+
+// console.log("Check:", check);
+// console.log("Has legal move:", legal);
+// console.log("Turn:", turn);
+// console.log("King color:", piece.color);
     return (
-        ValidateCheck(board, row, col) &&
+        !ValidateCheck(board, row, col) &&
         !HasLegalMove(board, piece, turn, lastMove));
 }
 

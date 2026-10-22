@@ -15,19 +15,19 @@ function App() {
   const [turn, setTurn] = useState("White");
   const [selectedSquare, setSelectedSquare] = useState(null);
 
-  console.log(board);
+  // console.log(board);
 
   function HandleSquareClick(row, col) {
     const testBoard = structuredClone(board);
     const piece = GetPiece(testBoard, row, col);
-    console.log(piece);
+    // console.log(piece);
     if (selectedSquare == null) {
       if (piece != null && piece.color == turn) {
-        console.log("First piece");
+        // console.log("First piece");
         setSelectedSquare({row, col});
       }
     } else {
-        console.log("Second piece");
+        // console.log("Second piece");
         const startRow = selectedSquare.row;
         const startCol = selectedSquare.col;
         const endRow = row;
@@ -36,7 +36,7 @@ function App() {
         // console.log(startRow, startCol);
         // console.log(endRow, endCol);
         if (MovePiece(testBoard, startRow, startCol, endRow, endCol, turn, false, lastMove) == true) {
-          console.log("Valid move");
+          // console.log("Valid move");
           setTurn(turn == "White" ? "Black" : "White");
           setBoard(testBoard);
           setSelectedSquare(null);
@@ -49,7 +49,7 @@ function App() {
             endCol: endCol
           })
         }
-      }
+      } setSelectedSquare(null);
   }
 
   return (

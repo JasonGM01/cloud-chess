@@ -3,9 +3,17 @@ import Promote from "../pieces/promote";
 import { ValidateCheck, ValidateCheckmate, ValidateStalemate } from "../validators/kingValidation";
 import { ValidatePawnPromo } from "../validators/pawnValidation";
 
-function Simulation(board, endRow, piece, turn, lastMove) {
-    if (piece == null) return false;
+function Simulation(board, startRow, startCol, endRow, endCol, piece, turn) {
 
+    if (piece == null) return false;
+    const currentMove = {
+        type: piece.type,
+        color: piece.color,
+        startRow: startRow,
+        startCol: startCol,
+        endRow: endRow,
+        endCol: endCol
+    };
     const oppColor = piece.color == "White" ? "Black" : "White";
 
     const oppKingData = GetKing(board, oppColor);
@@ -26,7 +34,7 @@ function Simulation(board, endRow, piece, turn, lastMove) {
     // console.log("Validate check");
     if (ValidateCheck(board, oppRow, oppCol)) {
         // console.log("validate Checkmate");
-        if (ValidateCheckmate(board, oppRow, oppCol, turn, lastMove)) {
+        if (ValidateCheckmate(board, oppRow, oppCol, oppTurn, currentMove)) {
             // console.log("Checkmate");
             // console.log(ValidateCheckmate(board, oppRow, oppCol, oppKing, turn, lastMove));
             return false;
@@ -38,13 +46,12 @@ function Simulation(board, endRow, piece, turn, lastMove) {
     // console.log(oppTurn);
     // console.log("sim 3");
     // console.log("Stalemate check");
-    if (ValidateStalemate(board, oppRow, oppCol, oppTurn, lastMove)) {
+    if (ValidateStalemate(board, oppRow, oppCol, oppTurn, currentMove)) {
         // console.log("Stalemate");
-        return false;
     }
     // console.log("No stalemate");
 
-    // console.log("Sim pass");
+    console.log("Sim pass");
     return true;
 }
 

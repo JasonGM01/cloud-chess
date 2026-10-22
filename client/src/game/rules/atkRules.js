@@ -5,9 +5,9 @@ export function EnPassant(board, startRow, startCol, endRow, endCol, lastMove){
     if (lastMove == null) return false;
 
     // console.log(pawn);
-    console.log(startRow, startCol);
-    console.log(endRow, endCol);
-    console.log(lastMove.endRow, lastMove.endCol);
+    // console.log(startRow, startCol);
+    // console.log(endRow, endCol);
+    // console.log(lastMove.endRow, lastMove.endCol);
     board[startRow][startCol] = null;
     board[endRow][endCol] = pawn;
     board[lastMove.endRow][lastMove.endCol] = null;
@@ -22,6 +22,6 @@ export function Attack(board, startRow, startCol, endRow, endCol){
     board[startRow][startCol] = null;
     board[endRow][endCol] = piece;
 
-    console.log("Captured opponent");
+    console.log("Captured opponent: ", piece);
     return true;
 }

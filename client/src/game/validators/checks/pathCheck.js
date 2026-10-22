@@ -6,6 +6,7 @@ export function Diagonal(board, startRow, startCol, endRow, endCol) {
     let column = startCol + columnStep;
     while (row != endRow && column != endCol) {
         if (board[row][column] != null) {
+            // console.log("square not empty")
             return false;
         }
         row += rowStep;

@@ -34,8 +34,9 @@ export function ValidateEnPassant(board, startRow, startCol, endRow, endCol, las
 
     if (piece == null || piece.type != "Pawn") return false;
     
-    console.log(lastMove);
-    if (lastMove == null || lastMove.type != 'Pawn') return false; 
+    // console.log(lastMove);
+    // console.log(piece);
+    if (lastMove == null || lastMove.type != "Pawn") return false; 
     
     const opponent = GetPiece(board, lastMove.endRow, lastMove.endCol);
     // console.log(opponent);
@@ -46,7 +47,7 @@ export function ValidateEnPassant(board, startRow, startCol, endRow, endCol, las
     const colDistance = endCol - startCol;    
     const atkRowDistance = Math.abs(rowDistance);
     const atkColDistance = Math.abs(colDistance);
-    const forward = (piece.color == "White") ? -1 : 1;
+    const forward = (piece.color == "White") ? 1 : -1;
 
     // console.log("Color check");
     if (lastMove.color == piece.color) return false;
@@ -62,6 +63,7 @@ export function ValidateEnPassant(board, startRow, startCol, endRow, endCol, las
     if (atkRowDistance != 1 || atkColDistance != 1) return false;
 
     // console.log("opponent location check");
+    // console.log(forward, rowDistance)
     if (rowDistance != forward) return false;
 
     // console.log("destination check");

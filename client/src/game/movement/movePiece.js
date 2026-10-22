@@ -4,7 +4,7 @@ import { GetPiece, GetKing } from "../pieces/getPiece";
 import { Attack, EnPassant } from "../rules/atkRules";
 import Castle from "../rules/castle";
 import { ValidateCastling, ValidateCheck } from "../validators/kingValidation";
-import { ValidateEnPassant, ValidatePawnATK } from "../validators/pawnValidation";
+import { ValidateEnPassant } from "../validators/pawnValidation";
 import { ValidateFirstTurn, ValidateMove, ValidateTurn } from "../validators/validation";
 import Simulation from "./simulation";
 
@@ -34,23 +34,36 @@ function MovePiece(board, startRow, startCol, endRow, endCol, turn, sim, lastMov
     // console.log("move type");
     if (lastMove != null && destination == null && piece.type == "Pawn" && rowDistance == 1 && colDistance == 1) {
         if (ValidateEnPassant(board, startRow, startCol, endRow, endCol, lastMove) == false) {
-            // console.log("Not en passant");
+            console.log("Not en passant");
             return false;
         }
-        // console.log("En Passant");
+        console.log("En Passant");
         EnPassant(board, startRow, startCol, endRow, endCol, lastMove);
     }
-    else if ((piece.type == "King" || piece.type == "Rook") && destination != null && piece.color == destination.color){
-        // console.log("Castle");
+    
+    else if ((piece.type == "King" || piece.type == "Rook") && destination != null && (piece.color == destination.color)){
+        if(sim == false){
+        console.log("Castle");}
         if (ValidateCastling(board, startRow, startCol, endRow, endCol, turn) == false) return false;
         Castle(board, startRow, startCol, endRow, endCol);
-    } else if (destination != null && destination.color != piece.color){
+    } 
+    
+    else if (piece != null && destination != null && (destination.color != piece.color)){
+        // console.log("Attack");
+        if (ValidateMove(board, startRow, startCol, endRow, endCol, piece.type, piece.color) == false) {
+            // console.log("Attack failed");
+            return false;
+        }
+        console.log("attack success")
         Attack(board, startRow, startCol, endRow, endCol);
-    } else if (piece.type != null) {
-        // console.log("Reg move");
+    } 
+    
+    else if (piece.type != null) {
+        if(sim == false){
+        console.log("Reg move");}
         // console.log(piece);
         if (ValidateMove(board, startRow, startCol, endRow, endCol, piece.type, piece.color) == false) {
-            console.log("Failed move validation");
+            // console.log("Failed move validation");
             return false;
         }
         // console.log("Execute");
@@ -69,7 +82,7 @@ function MovePiece(board, startRow, startCol, endRow, endCol, turn, sim, lastMov
 
     if (sim == false) {
         // console.log("sim 1");
-        if (Simulation(board, endRow, piece, turn, lastMove) == false) {
+        if (Simulation(board, startRow, startCol, endRow, endCol, piece, turn, lastMove) == false) {
             // board[startRow][startCol] = piece;
             // board[endRow][endCol] = null;
             return false;

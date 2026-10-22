@@ -94,7 +94,7 @@ export function ValidatePath(board, startRow, startCol, endRow, endCol, type) {
                     if (Diagonal(board, startRow, startCol, endRow, endCol) == false) return false;
                     return true;
                 }
-                // console.log("Bishop fail");
+                console.log("Bishop fail");
                 return false;
 
             case "Knight":
