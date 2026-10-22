@@ -1,4 +1,4 @@
-function Square({piece, row, col}){
+function Square({piece, row, col, onSquareClick}){
     const symbols = {
     White: {
         King: "♔",
@@ -20,7 +20,7 @@ function Square({piece, row, col}){
     const isLight = (row + col) % 2 == 0
     const squareColor = isLight ? "light" : "dark";
     return (
-        <div className={`square ${squareColor}`}>
+        <div  className={`square ${squareColor}`} onClick={() => onSquareClick(row, col)}>
             {piece ? symbols[piece.color][piece.type] : null}
         </div>
     );

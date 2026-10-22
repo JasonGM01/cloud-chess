@@ -1,16 +1,19 @@
 // import GetDestination from "../pieces/getDestination";
 import GetDestination from "../pieces/getDestination";
 import { GetPiece, GetKing } from "../pieces/getPiece";
-import { EnPassant } from "../rules/atkRules";
+import { Attack, EnPassant } from "../rules/atkRules";
 import Castle from "../rules/castle";
 import { ValidateCastling, ValidateCheck } from "../validators/kingValidation";
-import { ValidateEnPassant } from "../validators/pawnValidation";
+import { ValidateEnPassant, ValidatePawnATK } from "../validators/pawnValidation";
 import { ValidateFirstTurn, ValidateMove, ValidateTurn } from "../validators/validation";
 import Simulation from "./simulation";
 
 function MovePiece(board, startRow, startCol, endRow, endCol, turn, sim, lastMove) {
     const piece = GetPiece(board, startRow, startCol);
     if (piece == null) return false;
+
+    const rowDistance = Math.abs(startRow - endRow);
+    const colDistance = Math.abs(startCol - endCol);
 
     const destination = GetDestination(board, endRow, endCol);
     const KingData = GetKing(board, piece.color);
@@ -29,20 +32,21 @@ function MovePiece(board, startRow, startCol, endRow, endCol, turn, sim, lastMov
     }
     
     // console.log("move type");
-    if (lastMove != null && destination == null && piece.type == "Pawn") {
+    if (lastMove != null && destination == null && piece.type == "Pawn" && rowDistance == 1 && colDistance == 1) {
         if (ValidateEnPassant(board, startRow, startCol, endRow, endCol, lastMove) == false) {
-            console.log("Not en passant");
+            // console.log("Not en passant");
             return false;
         }
-        console.log("En Passant");
+        // console.log("En Passant");
         EnPassant(board, startRow, startCol, endRow, endCol, lastMove);
     }
     else if ((piece.type == "King" || piece.type == "Rook") && destination != null && piece.color == destination.color){
         // console.log("Castle");
         if (ValidateCastling(board, startRow, startCol, endRow, endCol, turn) == false) return false;
         Castle(board, startRow, startCol, endRow, endCol);
-    }
-    else if (piece.type != null) {
+    } else if (destination != null && destination.color != piece.color){
+        Attack(board, startRow, startCol, endRow, endCol);
+    } else if (piece.type != null) {
         // console.log("Reg move");
         // console.log(piece);
         if (ValidateMove(board, startRow, startCol, endRow, endCol, piece.type, piece.color) == false) {
@@ -72,6 +76,7 @@ function MovePiece(board, startRow, startCol, endRow, endCol, turn, sim, lastMov
         };
     }
 
+    piece.hasMoved = true;
     // console.log("accepted");
     return true;
 }

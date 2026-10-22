@@ -1,6 +1,6 @@
 import Square from "./Square";
 
-function ChessBoard({board}){
+function ChessBoard({board, onSquareClick}){
     return (
         <div className="chessboard">
             {board.map((row, rowIndex) => {
@@ -13,6 +13,7 @@ function ChessBoard({board}){
                                 piece={square}
                                 row={rowIndex}
                                 col={colIndex} 
+                                onSquareClick={onSquareClick}
                                 />
                             );
                         })}
