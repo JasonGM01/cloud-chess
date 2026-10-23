@@ -43,24 +43,11 @@ export function ValidateMove(board, startRow, startCol, endRow, endCol, type, co
     if (ValidatePattern(startRow, startCol, endRow, endCol, type) == false) return false;
 
     // console.log("Path validation");
-    // console.log(GetPiece(board, startRow, startCol));
-    // console.log(startRow, startCol);
-    // console.log(endRow, endCol);
-    if (ValidatePath(board, startRow, startCol, endRow, endCol, type) == false) {
-        // console.log("Failed path validation");
-        // console.log(" ");
-        return false;
-    }
+    if (ValidatePath(board, startRow, startCol, endRow, endCol, type) == false) return false;
 
     // console.log("Destination check");
-    if (ValidateDestination(board, endRow, endCol, color) == false) {
-        // console.log("Failed destination check");
-        // console.log(" ");
-        return false;
-    }
+    if (ValidateDestination(board, endRow, endCol, color) == false) return false;
 
-    console.log("Valid");
-    console.log(" ");
     return true;
 }
 

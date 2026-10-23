@@ -22,6 +22,5 @@ export function Attack(board, startRow, startCol, endRow, endCol){
     board[startRow][startCol] = null;
     board[endRow][endCol] = piece;
 
-    console.log("Captured opponent: ", piece);
     return true;
 }

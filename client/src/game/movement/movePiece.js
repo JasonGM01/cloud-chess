@@ -33,11 +33,13 @@ function MovePiece(board, startRow, startCol, endRow, endCol, turn, sim, lastMov
     
     // console.log("move type");
     if (lastMove != null && destination == null && piece.type == "Pawn" && rowDistance == 1 && colDistance == 1) {
+        if(sim == false){
+        console.log("En Passant");}
         if (ValidateEnPassant(board, startRow, startCol, endRow, endCol, lastMove) == false) {
             console.log("Not en passant");
             return false;
         }
-        console.log("En Passant");
+
         EnPassant(board, startRow, startCol, endRow, endCol, lastMove);
     }
     
@@ -49,18 +51,24 @@ function MovePiece(board, startRow, startCol, endRow, endCol, turn, sim, lastMov
     } 
     
     else if (piece != null && destination != null && (destination.color != piece.color)){
-        // console.log("Attack");
+        if(sim == false){
+        console.log("Attack");}
         if (ValidateMove(board, startRow, startCol, endRow, endCol, piece.type, piece.color) == false) {
-            // console.log("Attack failed");
+            if(sim == false){
+            console.log("Attack failed");}
             return false;
         }
-        console.log("attack success")
-        Attack(board, startRow, startCol, endRow, endCol);
+        // console.log("attack success")
+        Attack(board, startRow, startCol, endRow, endCol, sim);
+        if(destination.type == "King"){
+            console.log("King dethroned");
+        }
+        // console.log("Captured opponent: ", destination);
     } 
     
     else if (piece.type != null) {
-        if(sim == false){
-        console.log("Reg move");}
+        // if(sim == false){
+        // console.log("Reg move");}
         // console.log(piece);
         if (ValidateMove(board, startRow, startCol, endRow, endCol, piece.type, piece.color) == false) {
             // console.log("Failed move validation");

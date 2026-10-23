@@ -15,26 +15,31 @@ function App() {
   const [turn, setTurn] = useState("White");
   const [selectedSquare, setSelectedSquare] = useState(null);
 
-  // console.log(board);
-
   function HandleSquareClick(row, col) {
     const testBoard = structuredClone(board);
     const piece = GetPiece(testBoard, row, col);
-    // console.log(piece);
+    console.log(piece);
+    console.log(selectedSquare);
+
     if (selectedSquare == null) {
       if (piece != null && piece.color == turn) {
-        // console.log("First piece");
-        setSelectedSquare({row, col});
+        console.log("First select");
+        setSelectedSquare({ row, col });
       }
     } else {
-        // console.log("Second piece");
-        const startRow = selectedSquare.row;
-        const startCol = selectedSquare.col;
-        const endRow = row;
-        const endCol = col;
-        const movingPiece = GetPiece(testBoard, startRow, startCol);
-        // console.log(startRow, startCol);
-        // console.log(endRow, endCol);
+      console.log("Second select");
+      const startRow = selectedSquare.row;
+      const startCol = selectedSquare.col;
+      const endRow = row;
+      const endCol = col;
+      const movingPiece = GetPiece(testBoard, startRow, startCol);
+      // console.log(startRow, startCol);
+      if (piece != null && piece.color == turn) {
+        console.log("Change piece");
+        setSelectedSquare({row , col});
+      }
+      // console.log(endRow, endCol);
+      else {
         if (MovePiece(testBoard, startRow, startCol, endRow, endCol, turn, false, lastMove) == true) {
           // console.log("Valid move");
           setTurn(turn == "White" ? "Black" : "White");
@@ -48,13 +53,20 @@ function App() {
             endRow: endRow,
             endCol: endCol
           })
+        } else{
+          console.log("Invalid move - select again");
+          setSelectedSquare(null);
         }
-      } setSelectedSquare(null);
+      }
+    }
   }
+  console.log(board);
+
 
   return (
     <div>
       <div>
+      Turn: {turn}
         {<ChessBoard
           board={board}
           onSquareClick={HandleSquareClick}

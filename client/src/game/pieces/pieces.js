@@ -1,4 +1,5 @@
 export function Bishop(startRow, startCol, endRow, endCol){
+    // console.log("Bishop pattern check");
     if(Math.abs(startRow - endRow) == Math.abs(startCol - endCol)) return true;
     else return false; 
 }
