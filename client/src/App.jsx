@@ -18,8 +18,8 @@ function App() {
   function HandleSquareClick(row, col) {
     const testBoard = structuredClone(board);
     const piece = GetPiece(testBoard, row, col);
-    console.log(piece);
-    console.log(selectedSquare);
+    // console.log(piece);
+    // console.log(selectedSquare);
 
     if (selectedSquare == null) {
       if (piece != null && piece.color == turn) {

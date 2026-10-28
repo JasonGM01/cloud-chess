@@ -36,7 +36,7 @@ export function Horizontal(board, startRow, startCol, endCol) {
                 // console.log(board[startRow][i]);
                 return false;
             }
-            
+
         }
         // console.log("Pass horizontal");
         return true;
@@ -54,8 +54,8 @@ export function Vertical(board, startRow, startCol, endRow) {
                 // console.log(board[i][startCol]);
                 return false;
             }
-            
-        }return true;
+
+        } return true;
     } else if (startRow >= endRow) {
         for (let i = startRow - 1; i > endRow; i--) {
             // console.log("upper vert");
@@ -63,7 +63,7 @@ export function Vertical(board, startRow, startCol, endRow) {
                 // console.log(board[i][startCol]);
                 return false;
             }
-            
-        }return true;
+            // console.log("pass");
+        } return true;
     } else return false;
 }

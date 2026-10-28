@@ -3,14 +3,26 @@ import { GetPiece } from "../pieces/getPiece";
 
 export function ValidatePawnATK(board, startRow, startCol, endRow, endCol) {
     const piece = GetPiece(board, startRow, startCol);
-    const target = GetDestination(board, startRow, startCol);
+    const target = GetDestination(board, endRow, endCol);
+    const rowDistance = endRow - startRow;
+    const colDistance = Math.abs(endCol - startCol);
+
+    // console.log(piece);
+    // console.log(rowDistance, colDistance);
+    // console.log(target);
     if (piece == null) return false;
     if (target == null) return false;
-    if (
-        Math.abs(startRow - endRow) == 1 &&
-        Math.abs(startCol - endCol) == 1 &&
+    if (piece.color == "White" &&
+        rowDistance == 1 &&
+        colDistance == 1 &&
         piece.color != target.color) {
         return true;
+    } else if(
+        piece.color == "Black" &&
+        rowDistance == -1 &&
+        colDistance == 1 &&
+        piece.color != target.color) {
+            return true; 
     } else return false;
 }
 

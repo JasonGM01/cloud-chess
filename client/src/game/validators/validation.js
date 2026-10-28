@@ -1,6 +1,7 @@
 import GetDestination from "../pieces/getDestination";
 import { Diagonal, Horizontal, Vertical } from "../validators/checks/pathCheck";
 import { Rook, Bishop, Knight, King, Queen, Pawn } from "../pieces/pieces";
+import { GetPiece } from "../pieces/getPiece";
 // import { GetPiece } from "../pieces/getPiece";
 
 export function ValidateBoard(startRow, startCol, endRow, endCol) {
@@ -24,7 +25,7 @@ export function ValidateDestination(board, endRow, endCol, color) {
     else return true;
 }
 
-export function ValidateFirstTurn(turn, color){
+export function ValidateFirstTurn(turn, color) {
     return turn == color;
 }
 
@@ -52,8 +53,9 @@ export function ValidateMove(board, startRow, startCol, endRow, endCol, type, co
 }
 
 export function ValidatePath(board, startRow, startCol, endRow, endCol, type) {
-    const rowDistance = Math.abs(endRow - startRow);
-    const colDistance = Math.abs(endCol - startCol);
+    const piece = GetPiece(board, startRow, startCol);
+    const rowDistance = (endRow - startRow);
+    const colDistance = (endCol - startCol);
     let piece_type = type;
     // console.log(piece_type);
     if (piece_type != null) {
@@ -61,12 +63,12 @@ export function ValidatePath(board, startRow, startCol, endRow, endCol, type) {
 
             case "Rook":
                 // console.log("Rook path check");
-                if (startRow == endRow && startCol != endCol){
+                if (startRow == endRow && startCol != endCol) {
                     // console.log("Horizontal");
                     if (Horizontal(board, startRow, startCol, endCol) == false) return false;
                     return true;
                 }
-                else if (startCol == endCol && startRow != endRow){
+                else if (startCol == endCol && startRow != endRow) {
                     // console.log("Vertical");
                     if (Vertical(board, startRow, startCol, endRow) == false) return false;
                     return true;
@@ -76,12 +78,12 @@ export function ValidatePath(board, startRow, startCol, endRow, endCol, type) {
 
             case "Bishop":
                 // console.log("Bishop path check");
-                if (Math.abs(startRow - endRow) == Math.abs(startCol - endCol)){
+                if (Math.abs(startRow - endRow) == Math.abs(startCol - endCol)) {
                     // console.log("Diagonal")
                     if (Diagonal(board, startRow, startCol, endRow, endCol) == false) return false;
                     return true;
                 }
-                console.log("Bishop fail");
+                // console.log("Bishop fail");
                 return false;
 
             case "Knight":
@@ -99,26 +101,36 @@ export function ValidatePath(board, startRow, startCol, endRow, endCol, type) {
             case "King":
                 // console.log("King path check");
                 // console.log(rowDistance, colDistance);
-                if(rowDistance == 1 && colDistance == 1){
+                if (rowDistance == 1 && colDistance == 1) {
                     // console.log("As queen");
-                    if(ValidatePath(board, startRow, startCol, endRow, endCol, "Queen")) return true;
-                } else if ((rowDistance == 1 && colDistance == 0) || (rowDistance == 0 && colDistance == 1)){
+                    if (ValidatePath(board, startRow, startCol, endRow, endCol, "Queen")) return true;
+                } else if ((rowDistance == 1 && colDistance == 0) || (rowDistance == 0 && colDistance == 1)) {
                     // console.log("As rook");
-                    if(ValidatePath(board, startRow, startCol, endRow, endCol, "Rook")) return true;
+                    if (ValidatePath(board, startRow, startCol, endRow, endCol, "Rook")) return true;
                 }
                 // console.log("King fail");
                 return false;
 
             case "Pawn":
                 // console.log("Pawn path check");
-                if (
-                    rowDistance == 1 ||
-                    rowDistance == 2 &&
-                    colDistance == 0){
+                // console.log(piece.color);
+                // console.log(rowDistance, colDistance);
+                if (piece.color == "White" &&
+                    (rowDistance == 1 ||
+                     rowDistance == 2) &&
+                     colDistance == 0) {
                     if (Vertical(board, startRow, startCol, endRow) == false) return false;
                     return true;
-                    }
-                    // console.log("Pawn fail");
+                } else if (piece.color == "Black" &&
+                    (rowDistance == -1 ||
+                     rowDistance == -2) &&
+                     colDistance == 0) {
+                        // console.log("black turn");
+                        // console.log("coord", startRow, startCol);
+                        // console.log("coords2", endRow, endCol);
+                    if (Vertical(board, startRow, startCol, endRow) == false) return false;
+                    return true;
+                }
                 return false;
 
             default: return false;
@@ -139,13 +151,13 @@ export function ValidatePattern(startRow, startCol, endRow, endCol, type) {
     if (type == null) return false;
     // console.log(type);
     const pieceMovement = move[type];
-    return(
-        type == "Pawn" ? 
-        pieceMovement(startCol, endCol) : 
-        pieceMovement(startRow, startCol, endRow, endCol)
+    return (
+        type == "Pawn" ?
+            pieceMovement(startCol, endCol) :
+            pieceMovement(startRow, startCol, endRow, endCol)
     );
 }
 
-export function ValidateTurn(turn, color, lastMoveColor){
+export function ValidateTurn(turn, color, lastMoveColor) {
     return (turn == color && turn != lastMoveColor);
 }

@@ -51,7 +51,7 @@ function Simulation(board, startRow, startCol, endRow, endCol, piece, turn) {
     }
     // console.log("No stalemate");
 
-    console.log("Sim pass");
+    // console.log("Sim pass");
     return true;
 }
 
