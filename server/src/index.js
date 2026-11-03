@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import { supabase } from "./supabase.js";
 
 dotenv.config();
 
@@ -22,6 +23,21 @@ app.post("/api/move", (req, res) => {
 
 app.get("/api/health", (req, res) => {
     res.json({status: "ok"});
+});
+
+app.get("/api/games", async (req, res) => {
+    const {data, error} = await supabase.from("games").select("*");
+
+    if(error) {
+        console.log("Supabase error: ", error.message);
+        return res.status(500).json({
+            code: error.code, 
+            message: error.message, 
+            details: error.details, 
+            hint: error.hint});
+    }
+
+    res.json(data);
 });
 
 app.listen(PORT, () => {
