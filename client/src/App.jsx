@@ -15,6 +15,37 @@ function App() {
   const [turn, setTurn] = useState("White");
   const [selectedSquare, setSelectedSquare] = useState(null);
 
+  async function checkServer(){
+    const response = await fetch("http://localhost:4000/api/health");
+    const data = await response.json();
+
+    console.log(data);
+  }
+
+  async function sendMove(){
+    const move = {
+      piece: "Pawn",
+      startRow: 1,
+      startCol: 1,
+      endRow: 2,
+      endCol: 2
+    };
+
+    const response = await fetch(
+      "http://localhost:4000/api/move",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"},
+          body: JSON.stringify(move)
+      }
+    );
+
+    const data = await response.json();
+
+    console.log(data);
+  }
+
   function HandleSquareClick(row, col) {
     const testBoard = structuredClone(board);
     const piece = GetPiece(testBoard, row, col);
@@ -66,11 +97,21 @@ function App() {
   return (
     <div>
       <div>
+        
+        <button onClick={checkServer}>
+          check server
+        </button>
+
       Turn: {turn}
         {<ChessBoard
           board={board}
           onSquareClick={HandleSquareClick}
         />}
+        
+        <button onClick={sendMove}>
+          send move
+        </button>
+      
       </div>
     </div>
   )
