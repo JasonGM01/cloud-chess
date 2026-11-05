@@ -1,4 +1,15 @@
+import { useState } from "react";
+import Register from "../auth/register";
+
 function RegisterNewUser() {
+   const [email, setEmail] = useState("");
+   const [password, setPassword] = useState("");
+
+    async function HandleRegister() {
+    const result = await Register(email, password);
+
+    console.log(result);
+  }
     return (
         <div>
             <li>

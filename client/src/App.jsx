@@ -1,43 +1,23 @@
 import './App.css'
-import { useState, useEffect } from 'react';
+import { useState, useContext } from 'react';
+import { AuthContext } from './context/AuthContext.jsx';
 import Board from "../src/game//board/board";
 import MovePiece from './game/movement/movePiece';
 import StartBoard from '../src/game/board/startBoard';
 import ChessBoard from './components/ChessBoard';
 import { GetPiece } from "./game/pieces/getPiece";
-import Register from './auth/register';
-import Login from './auth/login';
-import { supabase } from './supabase';
-import Logout from './auth/logout';
 
 function App() {
+  const session = useContext(AuthContext);
   const startBoard = Board();
-  // const start = StartBoard(startBoard);
-  // const test = Test(startBoard);
   const [lastMove, setLastMove] = useState(null);
   const [board, setBoard] = useState(() => StartBoard(startBoard));
   const [turn, setTurn] = useState("White");
   const [selectedSquare, setSelectedSquare] = useState(null);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [session, setSession] = useState(null);
-
-  useEffect(() => {
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-        setSession(session);
-      });
-
-      
-
-      return () => {
-        subscription.unsubscribe();
-      };
-  }, []);
 
   async function CheckServer() {
     const response = await fetch("http://localhost:4000/api/health");
     const data = await response.json();
-
     console.log(data);
   }
 
@@ -64,23 +44,6 @@ function App() {
     const data = await response.json();
 
     console.log(data);
-  }
-
-  async function HandleRegister() {
-    // console.log(typeof(email), typeof(password));
-    const result = await Register(email, password);
-
-    console.log(result);
-  }
-
-  async function HandleLogin() {
-    const result = await Login(email, password);
-    console.log(result);
-  }
-
-  async function HandleLogout(){
-    const result = await Logout();
-    console.log("Logout: ", result);
   }
 
   function HandleSquareClick(row, col) {
@@ -133,55 +96,9 @@ function App() {
   console.log("Auth: ", session !== null);
   return (
     <div>
-      <div>
-        <div className="buttons">
-          <button onClick={CheckServer}>
-            Check Server
-          </button>
-
-          <li>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value)
-              }}
-            />
-
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value)
-              }}
-            />
-          </li>
-
-          <button onClick={HandleRegister}>
-            Register
-          </button>
-        </div>
-
-        <li>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value)
-            }}
-          />
-
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => {
-              setPassword(e.target.value)
-            }}
-          />
-        </li>
-
-        <button onClick={HandleLogin}>
-          Login
+      <div className="buttons">
+        <button onClick={CheckServer}>
+          Check Server
         </button>
 
         {session ? <p>Turn: {turn}</p> : (<p></p>)}
@@ -191,10 +108,6 @@ function App() {
         <button onClick={SendMove}>
           Send Move
         </button>
-          
-          <button onClick={HandleLogout}>
-            Logout
-          </button>
       </div>
     </div>
   )
