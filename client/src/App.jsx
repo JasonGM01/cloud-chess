@@ -1,10 +1,14 @@
 import './App.css'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Board from "../src/game//board/board";
 import MovePiece from './game/movement/movePiece';
 import StartBoard from '../src/game/board/startBoard';
 import ChessBoard from './components/ChessBoard';
 import { GetPiece } from "./game/pieces/getPiece";
+import Register from './auth/register';
+import Login from './auth/login';
+import { supabase } from './supabase';
+import Logout from './auth/logout';
 
 function App() {
   const startBoard = Board();
@@ -14,15 +18,30 @@ function App() {
   const [board, setBoard] = useState(() => StartBoard(startBoard));
   const [turn, setTurn] = useState("White");
   const [selectedSquare, setSelectedSquare] = useState(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [session, setSession] = useState(null);
 
-  async function checkServer(){
+  useEffect(() => {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+        setSession(session);
+      });
+
+      
+
+      return () => {
+        subscription.unsubscribe();
+      };
+  }, []);
+
+  async function CheckServer() {
     const response = await fetch("http://localhost:4000/api/health");
     const data = await response.json();
 
     console.log(data);
   }
 
-  async function sendMove(){
+  async function SendMove() {
     const move = {
       piece: "Pawn",
       startRow: 1,
@@ -36,14 +55,32 @@ function App() {
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"},
-          body: JSON.stringify(move)
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(move)
       }
     );
 
     const data = await response.json();
 
     console.log(data);
+  }
+
+  async function HandleRegister() {
+    // console.log(typeof(email), typeof(password));
+    const result = await Register(email, password);
+
+    console.log(result);
+  }
+
+  async function HandleLogin() {
+    const result = await Login(email, password);
+    console.log(result);
+  }
+
+  async function HandleLogout(){
+    const result = await Logout();
+    console.log("Logout: ", result);
   }
 
   function HandleSquareClick(row, col) {
@@ -67,7 +104,7 @@ function App() {
       // console.log(startRow, startCol);
       if (piece != null && piece.color == turn) {
         console.log("Change piece");
-        setSelectedSquare({row , col});
+        setSelectedSquare({ row, col });
       }
       // console.log(endRow, endCol);
       else {
@@ -84,34 +121,80 @@ function App() {
             endRow: endRow,
             endCol: endCol
           })
-        } else{
+        } else {
           console.log("Invalid move - select again");
           setSelectedSquare(null);
         }
       }
     }
   }
+
   console.log(board);
-
-
+  console.log("Auth: ", session !== null);
   return (
     <div>
       <div>
-        
-        <button onClick={checkServer}>
-          check server
+        <div className="buttons">
+          <button onClick={CheckServer}>
+            Check Server
+          </button>
+
+          <li>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value)
+              }}
+            />
+
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value)
+              }}
+            />
+          </li>
+
+          <button onClick={HandleRegister}>
+            Register
+          </button>
+        </div>
+
+        <li>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value)
+            }}
+          />
+
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value)
+            }}
+          />
+        </li>
+
+        <button onClick={HandleLogin}>
+          Login
         </button>
 
-      Turn: {turn}
-        {<ChessBoard
-          board={board}
-          onSquareClick={HandleSquareClick}
-        />}
-        
-        <button onClick={sendMove}>
-          send move
+        {session ? <p>Turn: {turn}</p> : (<p></p>)}
+
+        {session ? (<ChessBoard board={board} onSquareClick={HandleSquareClick} />) : (<p>Please log in</p>)}
+
+        <button onClick={SendMove}>
+          Send Move
         </button>
-      
+          
+          <button onClick={HandleLogout}>
+            Logout
+          </button>
       </div>
     </div>
   )
