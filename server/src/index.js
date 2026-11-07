@@ -22,7 +22,7 @@ app.post("/api/move", (req, res) => {
 });
 
 app.get("/api/health", (req, res) => {
-    res.json({status: "ok"});
+    res.json({status: "Connected"});
 });
 
 app.get("/api/games", async (req, res) => {

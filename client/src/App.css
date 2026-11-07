@@ -199,13 +199,40 @@
 
 .light{
   background-color: beige;  
+  font-weight: 500;
 }
 
 .dark{
   background-color: green;
+  font-weight: 500;
 }
 
 .chessboard{
   width: fit-content;
   margin: 0 auto;
 }
+
+.navbar{
+  display: flex;
+  justify-content: end;
+  border: 5px;
+  background-color: green;
+}
+
+.block{
+  align-items: center;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: green;
+  border: 5px;
+  border-color: red;
+  text-decoration: none;
+  color: white;
+
+  &:hover{
+    background-color: beige;
+    color: black;
+    font-weight: 500;
+  }
+}
+

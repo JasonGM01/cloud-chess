@@ -11,7 +11,7 @@ function LogInExisting() {
   }
     return (
         <div>
-            <li>
+            <li className="input-form">
                 <input
                     type="email"
                     value={email}

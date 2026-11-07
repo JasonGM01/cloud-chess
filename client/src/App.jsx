@@ -15,12 +15,6 @@ function App() {
   const [turn, setTurn] = useState("White");
   const [selectedSquare, setSelectedSquare] = useState(null);
 
-  async function CheckServer() {
-    const response = await fetch("http://localhost:4000/api/health");
-    const data = await response.json();
-    console.log(data);
-  }
-
   async function SendMove() {
     const move = {
       piece: "Pawn",
@@ -97,10 +91,6 @@ function App() {
   return (
     <div>
       <div className="buttons">
-        <button onClick={CheckServer}>
-          Check Server
-        </button>
-
         {session ? <p>Turn: {turn}</p> : (<p></p>)}
 
         {session ? (<ChessBoard board={board} onSquareClick={HandleSquareClick} />) : (<p>Please log in</p>)}
