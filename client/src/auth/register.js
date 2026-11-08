@@ -1,12 +1,14 @@
 import { supabase } from "../supabase.js";
 
-async function Register(email, password){
+async function Register(email, username, password){
     const {data, error} = await supabase.auth.signUp({
         email,
+        username,
         password
     });
 
     if(error) {
+        alert(`${error}`);
         console.error("Sign up failed: ", error.message);
         return null;
     }

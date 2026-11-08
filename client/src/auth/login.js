@@ -7,6 +7,7 @@ async function Login(email, password){
     });
 
     if(error) {
+        alert(`${error}`);
         console.error("Sign in failed: ", error.message);
         return null;
     }

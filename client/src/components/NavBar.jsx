@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useContext } from "react"
 import { AuthContext } from "../context/AuthContext";
 import Logout from "../auth/logout";
@@ -6,10 +6,12 @@ import CheckServer from "../database/checkServer";
 
 function NavBar() {
     const session = useContext(AuthContext);
+    const navigate = useNavigate();
 
     async function HandleLogout() {
         const result = await Logout();
         console.log("Logout: ", result);
+        navigate("/Login");
     }
 
     return (

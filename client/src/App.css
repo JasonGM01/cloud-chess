@@ -236,3 +236,15 @@
   }
 }
 
+.input-form{
+  display: flex;
+  flex-direction: column;
+  padding: 10px 250px 10px 250px;
+}
+
+.attribute{
+  align-items: center;
+  padding: 5px;
+  justify-content: center;
+  
+}
