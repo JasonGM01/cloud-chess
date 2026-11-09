@@ -1,9 +1,9 @@
 import './App.css'
 import { useState, useContext } from 'react';
 import { AuthContext } from './context/AuthContext.jsx';
-import Board from "../src/game//board/board";
+import Board from "../../shared/board/board.js";
 import MovePiece from './game/movement/movePiece';
-import StartBoard from '../src/game/board/startBoard';
+import StartBoard from '../../shared/board/startBoard.js';
 import ChessBoard from './components/ChessBoard';
 import { GetPiece } from "./game/pieces/getPiece";
 
@@ -14,6 +14,7 @@ function App() {
   const [board, setBoard] = useState(() => StartBoard(startBoard));
   const [turn, setTurn] = useState("White");
   const [selectedSquare, setSelectedSquare] = useState(null);
+  // const [createingGame, setCreatingGame] = useState(false);
 
   async function SendMove() {
     const move = {

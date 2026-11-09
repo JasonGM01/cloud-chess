@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { supabase } from "../supabase.js" 
-import { AuthContext } from "./AuthContext";
+import { supabase } from "../database/supabase.js"
+import { AuthContext } from "./AuthContext.jsx"
 
 function AuthProvider({ children }) {
     const [session, setSession] = useState(null);

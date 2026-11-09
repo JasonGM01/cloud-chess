@@ -3,6 +3,8 @@ import { useContext } from "react"
 import { AuthContext } from "../context/AuthContext";
 import Logout from "../auth/logout";
 import CheckServer from "../database/checkServer";
+import TestAuth from "../database/testAuth";
+import TestCreateGame from "../database/testCreateGame";
 
 function NavBar() {
     const session = useContext(AuthContext);
@@ -16,9 +18,11 @@ function NavBar() {
 
     return (
         <div className="navbar">
+            <button className="block" onClick={TestCreateGame}>Test New Game</button>
             <button className="block" onClick={CheckServer}>Check Server</button>
+            <button className="block" onClick={TestAuth}>Test Auth</button>
             <Link to="/" className="block">Home</Link>
-            
+
             {session ?
                 <><button className="block" onClick={HandleLogout}>Logout</button></> :
                 <>
