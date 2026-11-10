@@ -5,6 +5,8 @@ import Logout from "../auth/logout";
 import CheckServer from "../database/checkServer";
 import TestAuth from "../database/testAuth";
 import TestCreateGame from "../database/testCreateGame";
+import TestJoinGame from "../database/testJoinGame";
+import TestGetGame from "../database/testGetGame";
 
 function NavBar() {
     const session = useContext(AuthContext);
@@ -18,7 +20,9 @@ function NavBar() {
 
     return (
         <div className="navbar">
+            <button className="block" onClick={TestGetGame}>Test Get Game</button>
             <button className="block" onClick={TestCreateGame}>Test New Game</button>
+            <button className="block" onClick={TestJoinGame}>Test Join Game</button>
             <button className="block" onClick={CheckServer}>Check Server</button>
             <button className="block" onClick={TestAuth}>Test Auth</button>
             <Link to="/" className="block">Home</Link>
