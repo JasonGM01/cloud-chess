@@ -4,6 +4,7 @@ import { RequireAuth } from "../../middleware/requireAuth.js";
 import { Router } from "express";
 import Board from "../../../../shared/board/board.js";
 import StartBoard from "../../../../shared/board/startBoard.js";
+import MovePiece from "../../../../shared/game/movement/movePiece.js";
 
 const router = Router();
 
@@ -112,7 +113,33 @@ router.post("/games/:id/move", RequireAuth, async (req, res) => {
         return res.status(400).json({error: "Invalid move coordinates"});
     }
 
-    
+    const testBoard = structuredClone(game.board_state);
+
+    const valid = MovePiece(
+        testBoard,
+        startRow,
+        startCol,
+        endRow,
+        endCol,
+        game.turn,
+        false,
+        game.last_move
+    );
+
+    if (!valid) {
+        return res.status(400).json({error: "Illegal move"});
+    }
+
+    if (error) {
+        console.error("Move update failed", error.message);
+        return res.status(500).json({error: "Unable to save move"});
+    }
+
+    if (!data) {
+        return res.status(400).json({error: "Game state changed. Please refresh"});
+    }
+
+    return res.status(200).json(data);
 });
 
 export default router;
