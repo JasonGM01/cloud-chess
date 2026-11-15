@@ -1,5 +1,5 @@
-import GetDestination from "../pieces/getDestination";
-import { GetPiece } from "../pieces/getPiece";
+import GetDestination from "../pieces/getDestination.js";
+import { GetPiece } from "../pieces/getPiece.js";
 
 export function ValidatePawnATK(board, startRow, startCol, endRow, endCol) {
     const piece = GetPiece(board, startRow, startCol);

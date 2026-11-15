@@ -27,13 +27,6 @@ router.get("/games", async (req, res) => {
     res.json(data);
 });
 
-router.get("/auth-test", RequireAuth, (req, res) => {
-    res.json({
-        authenticated: true,
-        userId: req.user.id
-    });
-});
-
 router.get("/games/:id", RequireAuth, async (req, res) => {
     const gameid = req.params.id;
 
@@ -53,23 +46,11 @@ router.get("/games/:id", RequireAuth, async (req, res) => {
     return res.status(200).json(data);
 });
 
-router.get("/games/:id/move", RequireAuth, async (req, res) => {
-    const gameid = req.params.id;
-
-    const userClient = CreateUserClient(req.accessToken);
-
-    const { data, error } = await userClient.from("games").select("*").eq("id", gameid).maybeSingle();
-
-    if(error) {
-        console.error("Unable to retrieve game");
-        return;
-    }
-
-    if(!data) {
-        return res.status(404).json({error: "Game not found"});
-    }
-
-    
+router.get("/auth-test", RequireAuth, (req, res) => {
+    res.json({
+        authenticated: true,
+        userId: req.user.id
+    });
 });
 
 export default router;

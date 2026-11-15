@@ -1,5 +1,5 @@
-import { GetPiece } from "../pieces/getPiece";
-import MovePiece from "../movement/movePiece";
+import { GetPiece } from "../pieces/getPiece.js";
+import MovePiece from "../movement/movePiece.js";
 
 function HasLegalMove(board, piece, turn, lastMove){
     for (let i = 0; i <= 7; i++) {

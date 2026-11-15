@@ -1,7 +1,7 @@
-import { GetKing } from "../pieces/getPiece";
-import Promote from "../pieces/promote";
-import { ValidateCheck, ValidateCheckmate, ValidateStalemate } from "../validators/kingValidation";
-import { ValidatePawnPromo } from "../validators/pawnValidation";
+import { GetKing } from "../pieces/getPiece.js";
+import Promote from "../pieces/promote.js";
+import { ValidateCheck, ValidateCheckmate, ValidateStalemate } from "../validators/kingValidation.js";
+import { ValidatePawnPromo } from "../validators/pawnValidation.js";
 
 function Simulation(board, startRow, startCol, endRow, endCol, piece, turn) {
 
@@ -37,7 +37,7 @@ function Simulation(board, startRow, startCol, endRow, endCol, piece, turn) {
         if (ValidateCheckmate(board, oppRow, oppCol, oppTurn, currentMove)) {
             // console.log("Checkmate");
             // console.log(ValidateCheckmate(board, oppRow, oppCol, oppKing, turn, lastMove));
-            return false;
+            // return false;
         }
         // console.log("no checkmate");
     }

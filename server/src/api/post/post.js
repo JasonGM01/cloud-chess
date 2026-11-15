@@ -75,4 +75,44 @@ router.post("/games/join", RequireAuth, async (req, res) => {
     return res.status(200).json(data);
 });
 
+router.post("/games/:id/move", RequireAuth, async (req, res) => {
+    const gameid = req.params.id;
+
+    const playerId = req.user.id;
+
+    const { startRow, startCol, endRow, endCol } = req.body;
+    const coordinates = [startRow, startCol, endRow, endCol];
+
+    const userClient = CreateUserClient(req.accessToken);
+
+    const { data: game, error} = await userClient.from("games").select("*").eq("id", gameid).maybeSingle();
+
+    if (!game) {
+        return res.status(404).json({error: "Game not found"});
+    }
+
+    if (error) {
+        console.error("Game retrieval failed")
+        return res.status(500).json({error: "Unable to retrieve game"});
+    }
+
+    if (game.status != "active") {
+        return res.status(409).json({error: "Game is not active"});
+    }
+
+    if (game.turn == "White" && playerId != game.white_player_id) {
+        return res.status(403).json({error: "It is not your turn"});
+    }
+
+    if (game.turn == "Black" && playerId != game.black_player_id) {
+        return res.status(403).json({error: "It is not your turn"});
+    }
+
+    if (coordinates.some(num => num > 7 || num < 0 || !Number.isInteger(num))) {
+        return res.status(400).json({error: "Invalid move coordinates"});
+    }
+
+    
+});
+
 export default router;

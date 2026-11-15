@@ -1,9 +1,9 @@
-import HasLegalMove from "./hasLegalMove";
-import MovePiece from "../movement/movePiece";
-import { GetPiece } from "../pieces/getPiece";
-import { Horizontal} from "./checks/pathCheck";
-import { ValidatePawnATK } from "./pawnValidation";
-import { ValidateMove } from "./validation";
+import HasLegalMove from "./hasLegalMove.js";
+import MovePiece from "../movement/movePiece.js";
+import { GetPiece } from "../pieces/getPiece.js";
+import { Horizontal} from "./checks/pathCheck.js";
+import { ValidatePawnATK } from "./pawnValidation.js";
+import { ValidateMove } from "./validation.js";
 
 export function ValidateKingSide(board, kingRow, kingCol, rookCol, King, turn, lastMove) {
     // console.log("Kingside");

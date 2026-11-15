@@ -1,12 +1,11 @@
-// import GetDestination from "../pieces/getDestination";
-import GetDestination from "../pieces/getDestination";
-import { GetPiece, GetKing } from "../pieces/getPiece";
-import { Attack, EnPassant } from "../rules/atkRules";
-import Castle from "../rules/castle";
-import { ValidateCastling, ValidateCheck } from "../validators/kingValidation";
-import { ValidateEnPassant, ValidatePawnATK } from "../validators/pawnValidation";
-import { ValidateFirstTurn, ValidateMove, ValidateTurn } from "../validators/validation";
-import Simulation from "./simulation";
+import GetDestination from "../pieces/getDestination.js";
+import { GetPiece, GetKing } from "../pieces/getPiece.js";
+import { Attack, EnPassant } from "../rules/atkRules.js";
+import Castle from "../rules/castle.js";
+import { ValidateCastling, ValidateCheck } from "../validators/kingValidation.js";
+import { ValidateEnPassant, ValidatePawnATK } from "../validators/pawnValidation.js";
+import { ValidateFirstTurn, ValidateMove, ValidateTurn } from "../validators/validation.js";
+import Simulation from "./simulation.js";
 
 function MovePiece(board, startRow, startCol, endRow, endCol, turn, sim, lastMove) {
     const piece = GetPiece(board, startRow, startCol);
@@ -16,10 +15,6 @@ function MovePiece(board, startRow, startCol, endRow, endCol, turn, sim, lastMov
     const colDistance = Math.abs(startCol - endCol);
 
     const destination = GetDestination(board, endRow, endCol);
-    const KingData = GetKing(board, piece.color);
-    // const King = KingData[0];
-    const row = KingData[1];
-    const col = KingData[2];
 
     // console.log("last turn check");
     if (lastMove != null) {
@@ -54,7 +49,7 @@ function MovePiece(board, startRow, startCol, endRow, endCol, turn, sim, lastMov
         Attack(board, startRow, startCol, endRow, endCol);
         if(destination.type == "King"){
             console.log("King dethroned");
-            alert("Checkmate");
+            // alert("Checkmate");
         }
     }
     
@@ -95,9 +90,13 @@ function MovePiece(board, startRow, startCol, endRow, endCol, turn, sim, lastMov
         board[endRow][endCol] = piece;
     }
 
+    const KingData = GetKing(board, piece.color);
+    // const King = KingData[0];
+    const row = KingData[1];
+    const col = KingData[2];
     // console.log("Check 1");
     if (ValidateCheck(board, row, col)) {
-        // console.log("Check 4");
+        console.log("Check 4");
         board[startRow][startCol] = piece;
         board[endRow][endCol] = null
         return false;

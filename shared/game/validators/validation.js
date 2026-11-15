@@ -1,8 +1,8 @@
-import GetDestination from "../pieces/getDestination";
-import { Diagonal, Horizontal, Vertical } from "../validators/checks/pathCheck";
-import { Rook, Bishop, Knight, King, Queen, Pawn } from "../pieces/pieces";
-import { GetPiece } from "../pieces/getPiece";
-// import { GetPiece } from "../pieces/getPiece";
+import GetDestination from "../pieces/getDestination.js";
+import { Diagonal, Horizontal, Vertical } from "./checks/pathCheck.js";
+import { Rook, Bishop, Knight, King, Queen, Pawn } from "../pieces/pieces.js";
+import { GetPiece } from "../pieces/getPiece.js";
+// import { GetPiece } from "../pieces/getPiece.js";
 
 export function ValidateBoard(startRow, startCol, endRow, endCol) {
     if (startRow < 0 ||
@@ -99,16 +99,16 @@ export function ValidatePath(board, startRow, startCol, endRow, endCol, type) {
                 return false;
 
             case "King":
-                // console.log("King path check");
-                // console.log(rowDistance, colDistance);
-                if (rowDistance == 1 && colDistance == 1) {
-                    // console.log("As queen");
+                console.log("King path check");
+                console.log(rowDistance, colDistance);
+                if (Math.abs(rowDistance) == 1 && Math.abs(colDistance) == 1) {
+                    console.log("As queen");
                     if (ValidatePath(board, startRow, startCol, endRow, endCol, "Queen")) return true;
-                } else if ((rowDistance == 1 && colDistance == 0) || (rowDistance == 0 && colDistance == 1)) {
-                    // console.log("As rook");
+                } else if ((Math.abs(rowDistance) == 1 && Math.abs(colDistance) == 0) || (Math.abs(rowDistance) == 0 && Math.abs(colDistance) == 1)) {
+                    console.log("As rook");
                     if (ValidatePath(board, startRow, startCol, endRow, endCol, "Rook")) return true;
                 }
-                // console.log("King fail");
+                console.log("King fail");
                 return false;
 
             case "Pawn":

@@ -1,4 +1,4 @@
-import { GetPiece } from "../pieces/getPiece";
+import { GetPiece } from "../pieces/getPiece.js";
 
 export function EnPassant(board, startRow, startCol, endRow, endCol, lastMove){
     const pawn = GetPiece(board, startRow, startCol);

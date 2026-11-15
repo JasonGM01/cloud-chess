@@ -1,5 +1,5 @@
 // import GetDestination from "../pieces/getDestination";
-import { GetPiece } from "../pieces/getPiece";
+import { GetPiece } from "../pieces/getPiece.js";
 
 function Castle(board, startRow, startCol, endRow, endCol){
     const piece1 = GetPiece(board, startRow, startCol);

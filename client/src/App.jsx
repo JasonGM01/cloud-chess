@@ -2,10 +2,10 @@ import './App.css'
 import { useState, useContext } from 'react';
 import { AuthContext } from './context/AuthContext.jsx';
 import Board from "../../shared/board/board.js";
-import MovePiece from './game/movement/movePiece';
+import MovePiece from '../../shared/game/movement/movePiece.js';
 import StartBoard from '../../shared/board/startBoard.js';
 import ChessBoard from './components/ChessBoard';
-import { GetPiece } from "./game/pieces/getPiece";
+import { GetPiece } from '../../shared/game/pieces/getPiece.js';
 
 function App() {
   const session = useContext(AuthContext);
