@@ -1,10 +1,11 @@
-import { CreateUserClient } from "../../database/supabase.js";
+import { adminClient, CreateUserClient } from "../../database/supabase.js";
 import { randomBytes } from "node:crypto";
 import { RequireAuth } from "../../middleware/requireAuth.js";
 import { Router } from "express";
 import Board from "../../../../shared/board/board.js";
 import StartBoard from "../../../../shared/board/startBoard.js";
 import MovePiece from "../../../../shared/game/movement/movePiece.js";
+import { GetPiece } from "../../../../shared/game/pieces/getPiece.js";
 
 const router = Router();
 
@@ -78,15 +79,12 @@ router.post("/games/join", RequireAuth, async (req, res) => {
 
 router.post("/games/:id/move", RequireAuth, async (req, res) => {
     const gameid = req.params.id;
-
     const playerId = req.user.id;
-
     const { startRow, startCol, endRow, endCol } = req.body;
     const coordinates = [startRow, startCol, endRow, endCol];
-
     const userClient = CreateUserClient(req.accessToken);
-
     const { data: game, error} = await userClient.from("games").select("*").eq("id", gameid).maybeSingle();
+    let valid;
 
     if (!game) {
         return res.status(404).json({error: "Game not found"});
@@ -114,17 +112,23 @@ router.post("/games/:id/move", RequireAuth, async (req, res) => {
     }
 
     const testBoard = structuredClone(game.board_state);
+    const piece = GetPiece(testBoard, startRow, startCol);
 
-    const valid = MovePiece(
-        testBoard,
-        startRow,
-        startCol,
-        endRow,
-        endCol,
-        game.turn,
-        false,
-        game.last_move
-    );
+    try {
+        valid = MovePiece(
+            testBoard,
+            startRow,
+            startCol,
+            endRow,
+            endCol,
+            game.turn,
+            false,
+            game.last_move
+        );
+    } catch (error) {
+        console.error("Chess engine error:", error.message);
+        return res.status(500).json({error: "Unable to process move"});
+    }
 
     if (!valid) {
         return res.status(400).json({error: "Illegal move"});
@@ -139,7 +143,48 @@ router.post("/games/:id/move", RequireAuth, async (req, res) => {
         return res.status(400).json({error: "Game state changed. Please refresh"});
     }
 
-    return res.status(200).json(data);
+    const { data: updateGame, error: updateError } = await adminClient
+    .from("games")
+    .update({
+        board_state: testBoard,
+        turn: nextTurn,
+        last_move: lastMove,
+        version: game.version + 1
+    })
+    .eq("id", gameid)
+    .eq("version", game.version)
+    .eq("turn", game.turn)
+    .eq("status", "active")
+    .select()
+    .maybeSingle();
+
+    if (piece == null) {
+        return res.status(400).json({error: "No piece at starting position"});
+    }
+
+    if (piece.color != game.turn) {
+        return res.status(400).json({error: "Cannot move opponent's piece"});
+    }
+
+    const lastMove = {
+        type: piece.type,
+        color: piece.color,
+        startRow,
+        startCol,
+        endRow,
+        endCol
+    };
+
+    if (updateError) {
+        console.error("Move update failed:", updateError.message);
+        return res.status(500).json({error: "Unable to save move"});
+    }
+
+    if (!updateGame) {
+        return res.status(409).json({error: "Game state has changed. Please refresh"});
+    }
+
+    return res.status(200).json(updateGame);
 });
 
 export default router;
