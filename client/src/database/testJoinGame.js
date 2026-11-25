@@ -8,7 +8,7 @@ async function TestJoinGame(){
         return;
     }
 
-    const inviteCode = "BC12DF3E7E25";
+    const inviteCode = "12E455E869E6";
 
     const response = await fetch("http://localhost:4000/api/games/join", {
         method: "POST",

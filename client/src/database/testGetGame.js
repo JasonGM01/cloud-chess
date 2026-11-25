@@ -8,7 +8,7 @@ async function TestGetGame(){
         return;
     }
 
-    const gameid = "011bba05-d224-40d2-b43a-b03de869708a";
+    const gameid = "69677448-5261-4d85-93af-022c9005f0cb";
 
     const response = await fetch(`http://localhost:4000/api/games/${gameid}`, {
         headers: {
@@ -20,6 +20,11 @@ async function TestGetGame(){
 
     console.log("Status:", response.status);
     console.log("Game:", result);
+    if(response.ok) {
+        return result;
+    } else {
+        return null;
+    }
 }
 
 export default TestGetGame;

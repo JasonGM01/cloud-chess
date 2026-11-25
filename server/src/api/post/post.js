@@ -77,7 +77,7 @@ router.post("/games/join", RequireAuth, async (req, res) => {
     return res.status(200).json(data);
 });
 
-router.post("/games/:id/move", RequireAuth, async (req, res) => {
+router.post("/games/:id/moves", RequireAuth, async (req, res) => {
     const gameid = req.params.id;
     const playerId = req.user.id;
     const { startRow, startCol, endRow, endCol } = req.body;
@@ -86,13 +86,13 @@ router.post("/games/:id/move", RequireAuth, async (req, res) => {
     const { data: game, error} = await userClient.from("games").select("*").eq("id", gameid).maybeSingle();
     let valid;
 
-    if (!game) {
-        return res.status(404).json({error: "Game not found"});
-    }
-
     if (error) {
         console.error("Game retrieval failed")
         return res.status(500).json({error: "Unable to retrieve game"});
+    }
+
+    if (!game) {
+        return res.status(404).json({error: "Game not found"});
     }
 
     if (game.status != "active") {
@@ -114,6 +114,23 @@ router.post("/games/:id/move", RequireAuth, async (req, res) => {
     const testBoard = structuredClone(game.board_state);
     const piece = GetPiece(testBoard, startRow, startCol);
 
+    if (piece == null) {
+        return res.status(400).json({error: "No piece at starting position"});
+    }
+
+    if (piece.color != game.turn) {
+        return res.status(400).json({error: "Cannot move opponent's piece"});
+    }
+
+    const lastMove = {
+        type: piece.type,
+        color: piece.color,
+        startRow,
+        startCol,
+        endRow,
+        endCol
+    };
+
     try {
         valid = MovePiece(
             testBoard,
@@ -134,14 +151,7 @@ router.post("/games/:id/move", RequireAuth, async (req, res) => {
         return res.status(400).json({error: "Illegal move"});
     }
 
-    if (error) {
-        console.error("Move update failed", error.message);
-        return res.status(500).json({error: "Unable to save move"});
-    }
-
-    if (!data) {
-        return res.status(400).json({error: "Game state changed. Please refresh"});
-    }
+    const nextTurn = game.turn == "White" ? "Black" : "White";
 
     const { data: updateGame, error: updateError } = await adminClient
     .from("games")
@@ -157,23 +167,6 @@ router.post("/games/:id/move", RequireAuth, async (req, res) => {
     .eq("status", "active")
     .select()
     .maybeSingle();
-
-    if (piece == null) {
-        return res.status(400).json({error: "No piece at starting position"});
-    }
-
-    if (piece.color != game.turn) {
-        return res.status(400).json({error: "Cannot move opponent's piece"});
-    }
-
-    const lastMove = {
-        type: piece.type,
-        color: piece.color,
-        startRow,
-        startCol,
-        endRow,
-        endCol
-    };
 
     if (updateError) {
         console.error("Move update failed:", updateError.message);

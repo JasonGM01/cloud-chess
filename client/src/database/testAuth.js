@@ -15,7 +15,8 @@ async function TestAuth() {
         });
 
         const result = await response.json();
-
+        
+        console.log("Session:", data)
         console.log("Status: ", response.status);
         console.log("Result: ", result);
         alert("Check console");
