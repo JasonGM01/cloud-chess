@@ -18,7 +18,11 @@ function App() {
   const [selectedStart, setSelectedStart] = useState(null);
   const [gameid, setGameID] = useState(null);
 
-
+  useEffect(() => {
+    if (session) {
+      LoadStates();
+    }
+  }, [session]);
 
   useEffect(() => {
     const channel = supabase.channel(`room:game:${gameid}`)
