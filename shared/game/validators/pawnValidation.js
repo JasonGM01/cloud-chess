@@ -26,13 +26,13 @@ export function ValidatePawnATK(board, startRow, startCol, endRow, endCol) {
     } else return false;
 }
 
-export function ValidatePawnExtend(board, startRow, startCol, endRow) {
-    const piece = GetPiece(board, startRow, startCol);
-    const rowDistance = Math.abs(startRow - endRow);
-    if (piece.hasMoved == false && rowDistance == 1) return true;
-    else if (piece.hasMoved && (rowDistance == 1 || rowDistance == 2)) return true;
-    else return false;
-}
+// export function ValidatePawnExtend(board, startRow, startCol, endRow) {
+//     const piece = GetPiece(board, startRow, startCol);
+//     const rowDistance = Math.abs(startRow - endRow);
+//     if (piece.hasMoved == false && (rowDistance == 1 || rowDistance == 2)) return true;
+//     else if (piece.hasMoved && (rowDistance == 1)) return true;
+//     else return false;
+// }
 
 export function ValidatePawnPromo(endRow, piece) {
     if (piece.type != "Pawn") return false;

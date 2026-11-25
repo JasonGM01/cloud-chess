@@ -17,15 +17,10 @@ router.post("/move", (req, res) => {
 
 router.post("/games", RequireAuth, async (req, res) => {
     const userClient = CreateUserClient(req.accessToken);
-
     const inviteCode = randomBytes(6).toString("hex").toUpperCase();
-
     const empty = Board();
-
     const start = StartBoard(empty);
-
     const whitePlayerId = req.user.id;
-
     const {data: authData, error: authError} = await userClient.auth.getUser();
 
     console.log("Middleware:", req.user.id);

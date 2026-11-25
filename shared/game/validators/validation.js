@@ -2,7 +2,6 @@ import GetDestination from "../pieces/getDestination.js";
 import { Diagonal, Horizontal, Vertical } from "./checks/pathCheck.js";
 import { Rook, Bishop, Knight, King, Queen, Pawn } from "../pieces/pieces.js";
 import { GetPiece } from "../pieces/getPiece.js";
-// import { GetPiece } from "../pieces/getPiece.js";
 
 export function ValidateBoard(startRow, startCol, endRow, endCol) {
     if (startRow < 0 ||
@@ -117,13 +116,13 @@ export function ValidatePath(board, startRow, startCol, endRow, endCol, type) {
                 // console.log(rowDistance, colDistance);
                 if (piece.color == "White" &&
                     (rowDistance == 1 ||
-                     rowDistance == 2) &&
+                     rowDistance == 2 && piece.hasMoved == false) &&
                      colDistance == 0) {
                     if (Vertical(board, startRow, startCol, endRow) == false) return false;
                     return true;
                 } else if (piece.color == "Black" &&
                     (rowDistance == -1 ||
-                     rowDistance == -2) &&
+                     rowDistance == -2 && piece.hasMoved == false) &&
                      colDistance == 0) {
                         // console.log("black turn");
                         // console.log("coord", startRow, startCol);

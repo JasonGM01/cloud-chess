@@ -20,6 +20,11 @@ async function TestCreateGame() {
     console.log("Status:", response.status);
     console.log("Game ID:", result.id);
     console.log("Invite Code:", result.invite_code);
+    if (response.ok) {
+        return result;
+    } else {
+        return null;
+    }
 }
 
 export default TestCreateGame;

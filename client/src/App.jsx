@@ -1,5 +1,5 @@
 import './App.css'
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from './context/AuthContext.jsx';
 import Board from "../../shared/board/board.js";
 import StartBoard from '../../shared/board/startBoard.js';
@@ -7,6 +7,7 @@ import ChessBoard from './components/ChessBoard';
 import { GetPiece } from '../../shared/game/pieces/getPiece.js';
 import SendMove from './components/sendMove.js';
 import TestLoadGame from './database/testLoadGame.js';
+import { supabase } from './database/supabase.js';
 
 function App() {
   const session = useContext(AuthContext);
@@ -15,14 +16,39 @@ function App() {
   const [turn, setTurn] = useState("White");
   const [lastMove, setLastMove] = useState(null);
   const [selectedStart, setSelectedStart] = useState(null);
+  const [gameid, setGameID] = useState(null);
+
+
+
+  useEffect(() => {
+    const channel = supabase.channel(`room:game:${gameid}`)
+    .on(
+      "postgres_changes", 
+      {event: "UPDATE", 
+      schema: "public",
+      table: "games",
+      filter: `id=eq.${gameid}`},
+      async (payload) => {
+        await LoadStates();
+        console.log("Move recieved");
+        console.log(payload);
+      })
+    .subscribe();
+
+    return() => {
+      supabase.removeChannel(channel)
+    }
+  }, [gameid]);
 
   async function LoadStates() {
     const loading = await TestLoadGame();
+    console.log("Results:", loading?.version, loading?.turn);
 
     if (loading) {
-    setBoard(loading.board_state);
-    setLastMove(loading.last_move);
-    setTurn(loading.turn);
+      setGameID(loading.id);
+      setBoard(loading.board_state);
+      setLastMove(loading.last_move);
+      setTurn(loading.turn);
     }
   }
 
