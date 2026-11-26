@@ -74,7 +74,7 @@ router.post("/games/join", RequireAuth, async (req, res) => {
 
 router.post("/games/:id/moves", RequireAuth, async (req, res) => {
     const gameid = req.params.id;
-    const playerId = req.user.id;
+    const playerId = req.user.id;;
     const { startRow, startCol, endRow, endCol } = req.body;
     const coordinates = [startRow, startCol, endRow, endCol];
     const userClient = CreateUserClient(req.accessToken);

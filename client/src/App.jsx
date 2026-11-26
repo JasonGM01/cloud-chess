@@ -14,7 +14,6 @@ function App() {
   const startBoard = Board();
   const [board, setBoard] = useState(() => StartBoard(startBoard));
   const [turn, setTurn] = useState("White");
-  const [lastMove, setLastMove] = useState(null);
   const [selectedStart, setSelectedStart] = useState(null);
   const [gameid, setGameID] = useState(null);
 
@@ -46,12 +45,11 @@ function App() {
 
   async function LoadStates() {
     const loading = await TestLoadGame();
-    console.log("Results:", loading?.version, loading?.turn);
+    console.log("Results:", loading?.version, loading?.turn, loading?.last_move);
 
     if (loading) {
       setGameID(loading.id);
       setBoard(loading.board_state);
-      setLastMove(loading.last_move);
       setTurn(loading.turn);
     }
   }
@@ -83,7 +81,6 @@ function App() {
           setTurn(info.turn);
           setBoard(info.board_state);
           setSelectedStart(null);
-          setLastMove(info.last_move);
         } else {
           console.log("Invalid move - select again");
         }
